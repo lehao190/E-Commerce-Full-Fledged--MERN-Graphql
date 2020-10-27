@@ -1,0 +1,29 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  font-size: 16px;
+}
+
+a {
+  color: black;
+  margin: 0px;
+  padding: 0px;
+}
+
+img {
+  width: 100%;
+}
+
+h1, h2, h3, h4 {
+  font-size: 1.2rem;
+}
+
+@import "./scss/variables";
+@import "./scss/mixins";
+@import "./scss/navbar";
+@import "./scss/home";
+@import "./scss/login";
+@import "./scss/productDetails";

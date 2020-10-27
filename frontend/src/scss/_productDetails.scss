@@ -1,0 +1,197 @@
+#product-details-container {
+    margin-top: 20px;
+    width: 100%;
+
+    .home-redirect {
+        background-color: white;
+
+        div {
+            width: 120px;
+            margin-left: 20px;
+
+            a {
+
+                span {
+                    display: block;
+                    text-align: center;
+                    width: 100%;
+                    padding: 20px;
+                    font-weight: bold;
+                    cursor: pointer;
+        
+                    &:hover {
+                        background-color: $third;
+                        color: white;
+                    }
+                }
+            }
+        } 
+    }
+}
+
+.product-info {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 25% 35% 30%;
+    grid-gap: 30px 10px;
+    justify-content: space-evenly;
+
+    @include mobile {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .product-image {
+
+        div {
+            width: 100%;
+
+            img {
+                height: 300px;
+            }
+        }
+    }
+
+    .product-overview {
+        display: grid;
+        grid-auto-flow: row;
+        grid-template-rows: auto 55px 55px auto;
+
+        .product-name {
+            border-bottom: 1px solid $third;
+
+            h1 {
+               font-size: 1.2rem;
+               text-transform: uppercase;
+            }
+        }
+
+        .ratings {
+            border-bottom: 1px solid $third;
+            padding: 10px;
+
+            .product-ratings {
+                width: 38%;
+
+                @include mobile {
+                   width: 42%;
+                }
+            }
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 800;
+            padding: 10px;
+            border-bottom: 1px solid $third;
+        }
+
+        .description {
+            margin-top: 10px;
+            font-size: 1.0rem;
+            color: #979797;
+        }
+    }
+
+    .add-product {
+        
+        table {
+            border-collapse: collapse;
+            width: 60%;
+            box-shadow: 3px 5px 12px -4px rgba(0,0,0,0.75);
+
+            td, td {
+                font-size: 1.4rem;
+                border: 1px solid $third;
+                padding: 8px;
+                display: flex;
+                justify-content: space-around;
+
+                input {
+                    width: 30%;
+                }
+
+                button {
+                    display: block;
+                    border-color: unset;
+                    background: $third;
+                    padding: 10px;
+                    width: 100%;
+                    color: white;
+                    font-weight: bold;
+                    border-style: unset;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+.reviews {
+    margin-left: 40px;
+    margin-top: 50px;
+}
+
+.user-reviews {
+    margin-top: 40px;
+    margin-left: 80px;
+    width: 30%;
+
+    .user-review-container {
+        width: 100%;
+        margin-top: 10px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid $third;
+
+        & > :nth-child(2) {
+            color: yellow;
+        }
+
+        & > :nth-child(4) {
+            margin-top: 10px;
+        }
+    }
+
+    .my-review {
+        margin: 20px 0px;
+
+        & > :first-child {
+            margin: 20px 0;
+        }
+
+        form {
+            & > :nth-child(1) {
+                margin-bottom: 10px;
+    
+                h1 {
+                    margin-bottom: 8px;
+                    font-size: 1.0rem;
+                }
+    
+                & > :nth-child(2) {
+                    margin-bottom: 20px;
+    
+                    select {
+                        background-color: rgb(236, 236, 236);
+                    }
+                }
+    
+                textarea {
+                    background-color: rgb(236, 236, 236);
+                    height: 100px;
+                }
+            }
+    
+            button {
+                display: block;
+                border-color: unset;
+                background: $third;
+                padding: 10px;
+                width: 25%;
+                color: white;
+                font-weight: bold;
+                border-style: unset;
+                cursor: pointer;
+            }
+        }
+    }
+}

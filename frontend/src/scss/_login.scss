@@ -1,0 +1,164 @@
+.wrapper {
+    background-color: #f7f8fc;
+    color: #141c2c;
+    font-family: "Open Sans", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.google-redirect {
+    color: $primary;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+small {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 3px;
+    border: 20px solid #dce7ff;
+    width: 500px;
+    max-width: 100%;
+    display: flex;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+    border-right: 1px solid #ecf2ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    flex: 1;
+}
+
+.form-control {
+    margin: 10px 0;
+    width: 100%;
+}
+
+label {
+    display: inline-block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input:not([type="checkbox"]) {
+    background-color: transparent;
+    border: 2px solid #ecf2ff;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px;
+    width: 100%;
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.checkbox-container label {
+    color: #7a7e8c;
+    font-weight: normal;
+}
+
+.checkbox-container a {
+    margin-left: auto;
+}
+
+.btn {
+    cursor: pointer;
+    background-color: #141c2c;
+    border: 2px solid #141c2c;
+    border-radius: 3px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.btn-ghost {
+    background-color: transparent;
+    border-color: #ecf2ff;
+    color: #141c2c;
+}
+
+.btn img {
+    margin-right: 5px;
+    width: 20px;
+}
+
+.home-redirect {
+    background-color: #2762eb;
+}
+
+.features {
+    flex: 1.5;
+    padding: 40px;
+}
+
+.feature {
+    padding-left: 30px;
+    position: relative;
+    margin: 40px 0;
+}
+
+.feature i {
+    color: #2762eb;
+    position: absolute;
+    top: 5px;
+    left: 0;
+}
+
+.feature h3 {
+    margin: 0;
+}
+
+.feature p {
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 5px 0;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 16px;
+    resize: none;
+}
+
+@media (max-width: $mobile) {
+    .container {
+        flex-direction: column;
+    }
+
+    form {
+        border-right: 0;
+    }
+}

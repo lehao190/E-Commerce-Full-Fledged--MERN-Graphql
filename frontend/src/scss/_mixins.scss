@@ -1,0 +1,18 @@
+@mixin mobile{
+    @media(max-width: $mobile){
+        @content;
+    }
+}
+
+@mixin ratings {
+    .product-ratings {
+        .stars {
+            // width: 50%;
+            // font-size: 1.4rem;
+            // letter-spacing: 2px;
+            // background: linear-gradient(90deg, yellow 50%, gray 0%);
+            // background-clip: text;
+            // color: transparent;
+        }
+    }
+}

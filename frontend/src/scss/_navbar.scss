@@ -1,0 +1,66 @@
+#navbar {
+    width: 100%;
+    height: 70px;
+    background-color: $third;
+    display: grid;
+    color: white;
+    grid-template-columns: repeat(2, 1fr);
+    
+    & > div:first-child {
+        justify-self: start;
+        align-self: center;
+    }
+
+    .shopping {
+        padding: 0px 10px;
+        
+        i {
+            font-size: 2.5rem;
+            color: white;
+        }
+    }
+
+    & > div:last-child {
+        justify-self: end;
+        align-self: center;
+        
+        & > div {
+            width: 300px;
+            display: flex;
+            justify-content: space-evenly;
+
+            .navbar-cart {
+                cursor: pointer;
+            }
+
+            .navbar-login {
+                position: relative;
+                cursor: pointer;
+                // background-color: red;
+
+                .user-options {
+                    position: absolute;
+                    background-color:#92b6d5;
+                    width: 100px;
+                    text-align: center;
+                    top: 20px;
+                    display: none;
+
+                    & > * {
+                        padding: 10px 0px;
+                    }
+                }
+            }
+
+            .navbar-login:hover {
+                .user-options {
+                    display: block;
+                }
+                .user-options > *:hover {
+                    background-color: black;
+                }
+            }
+        }
+    }
+
+}
