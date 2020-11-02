@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
+// All Products Upon Request
 function Products() {
     const percent = 100;
 
@@ -30,6 +31,7 @@ function Products() {
                     style={style}>
                         ★★★★★
                     </div>
+                    <div>2 Đánh Giá</div>
                 </div>
 
                 <div className="product-price">

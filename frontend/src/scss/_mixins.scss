@@ -6,6 +6,22 @@
 
 @mixin ratings {
     .product-ratings {
+        display: flex;
+        align-items: center;
+
+        @include mobile {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        & > :nth-child(2) {
+            font-weight: 600;
+            font-size: 1.0rem;
+            width: 100%;
+            padding-bottom: 4px;
+            align-self: flex-end;
+        }
+
         .stars {
             // width: 50%;
             // font-size: 1.4rem;

@@ -1,6 +1,7 @@
 import React from 'react'
 import { PayPalButton } from "react-paypal-button-v2";
 
+// Paypal Button
 function Paypal() {
     return (
         <PayPalButton
@@ -22,7 +23,7 @@ function Paypal() {
                 return actions.resolve();
             }}
             options={{
-            clientId: "AcQjLMncBXFdRwp3h8FVU-X8zDWtb3zewIq8bf9o9sQlxxBt2l-ruldLs0RnROznv-jtZ9mrSnDrPPqB"
+                clientId: "AcQjLMncBXFdRwp3h8FVU-X8zDWtb3zewIq8bf9o9sQlxxBt2l-ruldLs0RnROznv-jtZ9mrSnDrPPqB"
             }}
         />
     )

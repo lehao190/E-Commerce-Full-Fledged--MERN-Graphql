@@ -10,6 +10,7 @@ import Shipping from './pages/Shipping';
 import PlaceOrder from './pages/PlaceOrder';
 import CheckOut from './pages/CheckOut';
 import Navbar from './components/Navbar';
+import CreateProduct from './pages/CreateProduct';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
+        <Route exact path="/products/create" component={CreateProduct} />
         <Route exact path="/products/:productId" component={ProductDetails} />
         <Route exact path="/cart" component={ProductCart} />
         <Route exact path="/shipping" component={Shipping} />
