@@ -1,3 +1,5 @@
+const fileStream = require("fs");
+
 // Check for users' Input Errors
 module.exports.validRegister = (
     username,
@@ -43,6 +45,48 @@ module.exports.validLogin = (email, password) => {
 
     if (password.trim() === '') {
         errors.password = 'Chưa điền mật khẩu';
+    }
+
+    return {
+        errors,
+        valid: Object.keys(errors).length < 1
+    };
+}
+
+// Check for admin's Inputs 
+module.exports.validCreateProduct = (file, description, name, category, brand, price, countInStock) => {
+    const errors = {};
+
+    if(description.trim() === "") {
+        errors.description = "Chi tiết còn trống"
+    }
+
+    if(name.trim() === "") {
+        errors.name = "Tên còn trống"
+    }
+
+    if(category.trim() === "") {
+        errors.category = "Loại còn trống"
+    }
+
+    if(brand.trim() === "") {
+        errors.brand = "Hãng còn trống"
+    }
+
+    if(price.trim() === "") {
+        errors.price = "Điền vào giá"
+    }
+
+    if(price < 0) {
+        errors.price = "Giá phải lớn hơn 0"
+    }
+
+    if(countInStock.trim() === "") {
+        errors.countInStock = "Số lượng còn trống"
+    }
+
+    if(countInStock < 0) {
+        errors.countInStock = "Số lượng phải lớn hơn 0"
     }
 
     return {

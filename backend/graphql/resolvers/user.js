@@ -3,6 +3,7 @@ const { tokenGenerator, tokenValidator } = require("../../config/jwtAuth");
 const bcrypt = require("bcryptjs");
 const { AuthenticationError, UserInputError, ApolloError } = require("apollo-server-express"); 
 const User = require("../../models/userSchema");
+const { checkAuth } = require("../../config/authCheck");
 
 module.exports = {
     // Query Resolvers
@@ -11,26 +12,37 @@ module.exports = {
             console.log("Query user get called !!!");
 
             // Find if user has JWT Token 
-            if(req.session.jwt) {
-                try {
-                    const decodedToken = tokenValidator(req.session.jwt);
+            const user = await checkAuth(req, tokenValidator);
 
-                    const user = await User.findOne({
-                        _id: decodedToken.id
-                    });
-                   
-                    return {
-                        id: user.id,
-                        username: user.username,
-                        email: user.email,
-                        isAdmin: user.isAdmin
-                    }
-                } catch (error) {
-                    throw error;
+            if(user) {
+                return {
+                    id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    isAdmin: user.isAdmin
                 }
             }
-        
+
             throw new AuthenticationError("Token needed !!!");
+
+            // if(req.session.jwt) {
+            //     try {
+            //         const decodedToken = tokenValidator(req.session.jwt);
+
+            //         const user = await User.findOne({
+            //             _id: decodedToken.id
+            //         });
+                   
+            //         return {
+            //             id: user.id,
+            //             username: user.username,
+            //             email: user.email,
+            //             isAdmin: user.isAdmin
+            //         }
+            //     } catch (error) {
+            //         throw error;
+            //     }
+            // }
         },
     },
 

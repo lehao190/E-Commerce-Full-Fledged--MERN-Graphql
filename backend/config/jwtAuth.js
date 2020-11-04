@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/userSchema");
 
 module.exports = {
     // Create Token for user
@@ -26,5 +27,6 @@ module.exports = {
     tokenValidator(token) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         return decoded;
-    }
+    },
+
 };
