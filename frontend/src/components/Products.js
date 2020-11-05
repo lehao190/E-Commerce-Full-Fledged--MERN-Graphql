@@ -19,7 +19,7 @@ function Products() {
         <div className="product-card">
             <Link to="/products/asd">
                 <div className="product-image">
-                    <img src="logo192.png"/>
+                    <img src="logo192.png" alt="" />
                 </div>
                     
                 <div className="product-name">

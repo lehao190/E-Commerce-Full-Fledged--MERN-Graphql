@@ -1,0 +1,51 @@
+#cart-container {
+    width: 100%;
+    padding: 30px 40px;
+    display: flex;
+    flex-wrap: wrap;
+
+    .cart {
+        flex: 80%;
+
+        .cart-title {
+            
+            h1 {
+                color: $third;
+                font-size: 1.5rem;
+            }
+        }
+
+        @include cart-products
+    }
+
+    .cart-checkout {
+        flex: 20%;
+
+        table {
+            width: 100%;
+            border: 1px solid $third;
+            border-collapse: collapse;
+            box-shadow: 3px 5px 9px -4px rgba(0, 0, 0, 0.75);
+
+            td {
+                border: 1px solid $third;
+
+                h1 {
+                    padding: 10px 8px;
+                }
+            }
+
+            button {
+                display: block;
+                border-color: unset;
+                background: $third;
+                padding: 10px;
+                width: 100%;
+                color: white;
+                font-weight: bold;
+                border-style: unset;
+                cursor: pointer;
+            }
+        }
+    }
+}

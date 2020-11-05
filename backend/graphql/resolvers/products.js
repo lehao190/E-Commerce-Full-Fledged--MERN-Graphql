@@ -3,6 +3,7 @@ const { UserInputError } = require("apollo-server-express");
 const Product = require("../../models/productSchema");
 const { tokenValidator } = require("../../config/jwtAuth");
 const { checkAuth } = require("../../config/authCheck");
+const { validCreateProduct } = require("../../config/validate");
 
 module.exports = {
     // Product Query
@@ -34,6 +35,15 @@ module.exports = {
                 })
             }
 
+            // Check inputs
+            const { errors, valid } = validCreateProduct(description, name, category, brand, price, countInStock);
+
+            if(!valid) {
+                throw new UserInputError("Errors occured when create product", {
+                    errors
+                });
+            }
+
             const { createReadStream, filename, mimetype, encoding } = await file;
 
             const streamPath = `${Math.random()}${filename}`;
@@ -62,7 +72,7 @@ module.exports = {
             }
 
             //  Create Product
-            const product = new Product({
+            let product = new Product({
                 name,
                 description,
                 category,

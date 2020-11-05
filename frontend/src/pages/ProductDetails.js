@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import UserReviews from '../components/UserReviews';
 
-function ProductDetails() {
+function ProductDetails(props) {
     const percent = 50;
-
+    
     const style = {
         width: "50%",
         fontSize: "1.4rem",
@@ -26,7 +26,7 @@ function ProductDetails() {
             <div className="product-info">
                 <div className="product-image">
                     <div>
-                        <img src="/logo192.png" />
+                        <img src="/logo192.png" alt=""/>
                     </div>
                 </div>
 
@@ -43,8 +43,11 @@ function ProductDetails() {
                     <div className="ratings">
                         <div className="product-ratings">
                             <div className="stars" 
-                            style={style}>
+                                style={style}>
                                 ★★★★★
+                            </div>
+                            <div className="product-reviews">
+                                2 đánh giá
                             </div>
                         </div>
                     </div>
@@ -67,37 +70,43 @@ function ProductDetails() {
                 </div>
 
                 <div className="add-product">
-                    <form action="/">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <td><h1>Giá: </h1> <h1>$40</h1> </td>
-                                </tr>
-                            </thead>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td><h1>Giá: </h1> <h1>$40</h1> </td>
+                            </tr>
+                        </thead>
 
-                           <tbody>
-                                <tr>
-                                    <td>
-                                        <h1>Tình trạng: </h1>
-                                        <h1>Vẫn còn</h1>
-                                    </td>
-                                </tr>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h1>Tình trạng: </h1>
+                                    <h1>Vẫn còn</h1>
+                                </td>
+                            </tr>
 
-                                <tr>
-                                    <td>
-                                        <h1>Số lượng: </h1>
-                                        <input type="number" min="0"/>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>
+                                    <h1>Số lượng: </h1>
+                                    <input type="number" min="0"/>
+                                </td>
+                            </tr>
 
-                                <tr>
-                                    <td>
-                                        <button>THÊM VÀO GIỎ</button>
-                                    </td>
-                                </tr>
-                           </tbody>
-                        </table>
-                    </form>
+                            <tr>
+                                <td>
+                                    <button>
+                                        <Link to="/cart" style={{
+                                            color: "white",
+                                            width: "100%",
+                                            display: "block"
+                                            }}>
+                                            THÊM VÀO GIỎ
+                                        </Link>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 

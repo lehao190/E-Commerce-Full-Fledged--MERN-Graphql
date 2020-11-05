@@ -36,6 +36,7 @@ module.exports.validRegister = (
     };
 };
 
+// Check for user's login inputs
 module.exports.validLogin = (email, password) => {
     const errors = {};
 
@@ -54,7 +55,7 @@ module.exports.validLogin = (email, password) => {
 }
 
 // Check for admin's Inputs 
-module.exports.validCreateProduct = (file, description, name, category, brand, price, countInStock) => {
+module.exports.validCreateProduct = (description, name, category, brand, price, countInStock) => {
     const errors = {};
 
     if(description.trim() === "") {
@@ -73,16 +74,8 @@ module.exports.validCreateProduct = (file, description, name, category, brand, p
         errors.brand = "Hãng còn trống"
     }
 
-    if(price.trim() === "") {
-        errors.price = "Điền vào giá"
-    }
-
     if(price < 0) {
         errors.price = "Giá phải lớn hơn 0"
-    }
-
-    if(countInStock.trim() === "") {
-        errors.countInStock = "Số lượng còn trống"
     }
 
     if(countInStock < 0) {
