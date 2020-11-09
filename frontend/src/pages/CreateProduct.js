@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation } from "@apollo/client";
-import { PRODUCT_CREATE } from "../graphql/Mutations/createProduct"
+import { PRODUCT_CREATE } from "../graphql/Mutations/createProduct";
 
 // Create Product Page
 function CreateProduct(props) {

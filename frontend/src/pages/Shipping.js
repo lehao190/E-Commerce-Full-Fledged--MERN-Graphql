@@ -1,10 +1,18 @@
 import React from 'react';
 
-function Shipping() {
+function Shipping(props) {
+    const onSubmit = (e) => {
+        e.preventDefault();
+
+        props.history.push({
+            pathname: "/placeorder"
+        });
+    }
+
     return (
         <div className="wrapper">
             <div className="container">
-                <form className="login-form">
+                <form onSubmit={onSubmit} className="login-form">
                     <small>GIAO HÀNG</small>
 
                     <div className="form-control">

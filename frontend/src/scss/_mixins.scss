@@ -103,3 +103,85 @@
     
     }
 }
+
+@mixin add-product {
+    .add-product {
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 3px 5px 12px -4px rgba(0,0,0,0.75);
+
+            td, td {
+                font-size: 1.4rem;
+                border: 1px solid $third;
+                padding: 8px;
+                display: flex;
+                justify-content: space-around;
+
+                input {
+                    width: 30%;
+                }
+
+                button {
+                    display: block;
+                    border-color: unset;
+                    background: $third;
+                    padding: 10px;
+                    width: 100%;
+                    color: white;
+                    font-weight: bold;
+                    border-style: unset;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+@mixin flex-cart {
+    .cart {
+        flex: 80%;
+
+        .cart-title {
+            
+            h1 {
+                color: $third;
+                font-size: 1.5rem;
+            }
+        }
+
+        @include cart-products
+    }
+
+    .cart-checkout {
+        flex: 20%;
+
+        table {
+            width: 100%;
+            border: 1px solid $third;
+            border-collapse: collapse;
+            box-shadow: 3px 5px 9px -4px rgba(0, 0, 0, 0.75);
+
+            td {
+                border: 1px solid $third;
+
+                h1 {
+                    padding: 10px 8px;
+                }
+            }
+
+            button {
+                display: block;
+                border-color: unset;
+                background: $third;
+                padding: 10px;
+                width: 100%;
+                color: white;
+                font-weight: bold;
+                border-style: unset;
+                cursor: pointer;
+            }
+        }
+    }
+}

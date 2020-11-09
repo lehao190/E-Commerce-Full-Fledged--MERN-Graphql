@@ -1,13 +1,14 @@
 const { validLogin, validRegister } = require("../../config/validate");
 const { tokenGenerator, tokenValidator } = require("../../config/jwtAuth");
 const bcrypt = require("bcryptjs");
-const { AuthenticationError, UserInputError, ApolloError } = require("apollo-server-express"); 
+const { AuthenticationError, UserInputError } = require("apollo-server-express"); 
 const User = require("../../models/userSchema");
 const { checkAuth } = require("../../config/authCheck");
 
 module.exports = {
     // Query Resolvers
     Query: {
+        // Query User's Info
         async me(_, __, { req }) {
             console.log("Query user get called !!!");
 
