@@ -1,8 +1,15 @@
 import React from 'react';
 import CartProducts from '../components/CartProducts';
 
+function PlaceOrder(props) {
+    const onSubmit = (e) => {
+        e.preventDefault();
 
-function PlaceOrder() {
+        props.history.push({
+            pathname: "/checkout/Oad089ab421"
+        });
+    };
+
     return (
         <div id="placeorder-container">
             <div className="cart">
@@ -29,7 +36,7 @@ function PlaceOrder() {
 
             <div className="cart-checkout">
                 <div className="add-product">
-                    <form>
+                    <form onSubmit={onSubmit}>
                         <table>
                             <thead>
                                 <tr>

@@ -27,7 +27,7 @@ function App() {
         <Route exact path="/cart" component={ProductCart} />
         <Route exact path="/shipping" component={Shipping} />
         <Route exact path="/placeorder" component={PlaceOrder} />
-        <Route exact path="/checkout" component={CheckOut} />
+        <Route exact path="/checkout/:checkoutId" component={CheckOut} />
       </Switch>
     </BrowserRouter>
     </>
