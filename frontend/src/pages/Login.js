@@ -69,6 +69,10 @@ function Login(props) {
                         {errors && errors.password}
                     </div>
 
+                    <div style={{color: "red"}}>
+                        {errors && errors.user}
+                    </div>
+
                     <button className="btn">Đăng Nhập</button>
 
                     <small>Chưa Có Tài Khoản? <Link className="google-redirect" to="/register">Đăng Ký</Link></small> 

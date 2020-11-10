@@ -11,6 +11,8 @@ import PlaceOrder from './pages/PlaceOrder';
 import CheckOut from './pages/CheckOut';
 import Navbar from './components/Navbar';
 import CreateProduct from './pages/CreateProduct';
+import ProductList from './pages/ProductList';
+import OrderList from './pages/OrderList';
 
 function App() {
   return (
@@ -23,10 +25,12 @@ function App() {
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/products/create" component={CreateProduct} />
+        <Route exact path="/products/productlist" component={ProductList} />
         <Route exact path="/products/:productId" component={ProductDetails} />
         <Route exact path="/cart" component={ProductCart} />
         <Route exact path="/shipping" component={Shipping} />
         <Route exact path="/placeorder" component={PlaceOrder} />
+        <Route exact path="/checkout/orderlist" component={OrderList} />
         <Route exact path="/checkout/:checkoutId" component={CheckOut} />
       </Switch>
     </BrowserRouter>

@@ -185,3 +185,51 @@
         }
     }
 }
+
+@mixin table-items {
+    .table-dashboard {
+        width: 85%;
+        border-collapse: collapse;
+
+        thead {
+            color: $third;
+        }
+
+        thead,tbody {
+            width: 100%;
+        }
+
+        thead tr td, tbody tr td {
+            width: 10%;
+            font-size: 1.4rem;
+            padding: 8px;
+        }
+
+        tbody {
+            tr:nth-child(odd) {
+                background-color: rgb(233, 233, 233);
+            }
+
+            td:last-child {
+                border: unset;
+                width: 6%;
+
+                span {
+                    margin: 0 5px;
+                    padding: 10px;
+                    cursor: pointer;
+                }
+
+                .edit {
+                    background-color: $third;
+                    color: white;
+                }
+
+                .delete {
+                    color: white;
+                    background-color: red;
+                }
+            }
+        }
+    }
+}

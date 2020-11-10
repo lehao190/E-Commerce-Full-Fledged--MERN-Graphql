@@ -1,5 +1,6 @@
 import React from 'react';
 import CartProducts from '../components/CartProducts';
+import Paypal from "../components/paypal";
 
 function CheckOut(props) {
     return (
@@ -56,6 +57,16 @@ function CheckOut(props) {
                                     <td>
                                         <h1>Tổng cộng: </h1>
                                         <h1>$ 280</h1>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div style={{
+                                            width: "100%"
+                                        }}>
+                                            <Paypal/>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

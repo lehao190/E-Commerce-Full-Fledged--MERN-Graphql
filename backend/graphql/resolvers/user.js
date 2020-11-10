@@ -103,10 +103,10 @@ module.exports = {
             }
 
             // Find user if exists
-            let user = await User.findOne({
+            const user = await User.findOne({
                 email
             });
-
+            
             if(!user) {
                 throw new UserInputError("Errors occured in login process", {
                     errors: {
