@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from "@apollo/client";
-import { PRODUCT_CREATE } from "../graphql/Mutations/productMutations";
-import { PRODUCTS } from "../graphql/Queries/productQueries";
 
-// Create Product Page
-function CreateProduct(props) {
-    const [createProduct] = useMutation(PRODUCT_CREATE);
-    
+function EditProduct(props) {
     const [errors, setErrors] = useState("");
     const [upload, setUpload] = useState("");
     const [name, setName] = useState("");
@@ -28,49 +23,36 @@ function CreateProduct(props) {
     const onSubmit = async(e) => {
         e.preventDefault();
         
-        try {
-            await createProduct({ 
-                variables: { 
-                    file: upload,
-                    name,
-                    description,
-                    category,
-                    brand,
-                    price: Number(price),
-                    countInStock: Number(countInStock)
-                },
-                update: async (cache, { data: { createProduct } }) => {
-                    const existingProducts = await cache.readQuery({
-                        query: PRODUCTS
-                    });
-
-                    const newProduct = createProduct;
-
-                    cache.writeQuery({
-                        query: PRODUCTS,
-                        data: {
-                            products: [newProduct, ...existingProducts.products]
-                        }
-                    });
-
-                    setErrors("");
+        // try {
+        //     await createProduct({ 
+        //         variables: { 
+        //             file: upload,
+        //             name,
+        //             description,
+        //             category,
+        //             brand,
+        //             price: Number(price),
+        //             countInStock: Number(countInStock)
+        //         },
+        //         update: () => {
+        //             setErrors("");
                     
-                    props.history.push({
-                        pathname: "/"
-                    });
-                },
-            });
-        } catch (error) {
-            setErrors(error.graphQLErrors[0].extensions.errors);
-            return null;
-        }
+        //             props.history.push({
+        //                 pathname: "/"
+        //             });
+        //         },
+        //     });
+        // } catch (error) {
+        //     setErrors(error.graphQLErrors[0].extensions.errors);
+        //     return null;
+        // }
     }
 
     return (
         <div className="wrapper" style={{height: "unset"}}>
             <div className="container" style={{marginTop: "40px", marginBottom: "40px"}}>
                 <form onSubmit={onSubmit} className="login-form" encType="multipart/form-data">
-                    <small>TẠO SẢN PHẨM</small>
+                    <small>THAY ĐỔI</small>
                  
                     <div style={{color: "red"}}>
                         {errors && errors.isAdmin}
@@ -139,11 +121,11 @@ function CreateProduct(props) {
                         {errors && errors.file}
                     </div>
 
-                    <button className="btn">TẠO</button>
+                    <button className="btn">THAY ĐỔI</button>
                 </form>
             </div>
         </div> 
     )
 }
 
-export default CreateProduct
+export default EditProduct

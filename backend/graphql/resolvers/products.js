@@ -8,13 +8,27 @@ const { validCreateProduct } = require("../../config/validate");
 module.exports = {
     // Product Query
     Query: {
-       uploads() {
-           console.log('query uploads')
-           return [{
-               filename: "ahahha",
-               mimetype: "mime",
-           }]
-       }
+        // Select all products
+        async products() {
+            console.log("Products Query get called !!!");
+
+            const products = await Product.find().sort("-createdAt");
+
+            // Check if products exist
+            if(!products) {
+                return;
+            }
+
+            return products;
+        }
+
+        //    uploads() {
+        //        console.log('query uploads')
+        //        return [{
+        //            filename: "ahahha",
+        //            mimetype: "mime",
+        //        }]
+        //    }
     },
 
     // Product Mutation
@@ -88,6 +102,36 @@ module.exports = {
                 id: product._id,
                 ...product._doc
             };
+        },
+
+        async deleteProduct(_, { id, filename }, { req }) {
+            console.log("Delete Product Mutation called !!!");
+
+            // Check for token
+            const user = await checkAuth(req, tokenValidator);
+
+            // Check if user is Admin
+            if(!user.isAdmin) {
+                throw new UserInputError("Errors in creating product", {
+                    errors: {
+                        isAdmin: "Không phải Admin"
+                    }
+                })
+            }
+
+            // Find and delete
+            const product = await Product.deleteOne({
+                _id: id
+            });
+
+            fileStream.unlink("./public/images/" + filename, (err) => {
+                if(err) throw err;
+                console.log("Delete File Successfully Mate: ", filename);
+            });
+
+            return {
+                message: "Delete Product Successfully !!!"
+            }
         }
     }
 }

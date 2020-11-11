@@ -1,7 +1,13 @@
+import { useQuery } from '@apollo/client';
 import React from 'react';
 import Item from '../components/Item';
+import { PRODUCTS } from "../graphql/Queries/productQueries";
 
-function ProductList() {
+function ProductList(props) {
+    const { loading, data: { products } } = useQuery(PRODUCTS, {
+        fetchPolicy: "cache-first"
+    });
+
     return (
         <div id="product-list-container">
             <div>
@@ -27,10 +33,10 @@ function ProductList() {
                     </thead>
 
                     <tbody>
-                        <Item/>
-                        <Item/>
-                        <Item/>
-                        <Item/>
+                        {loading && loading}
+                        {products && products.map((product) => {
+                            return <Item key={product.id} product={product} history={props.history}/>
+                        })}
                     </tbody>
                 </table>
             </div>

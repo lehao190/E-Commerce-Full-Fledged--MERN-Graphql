@@ -13,6 +13,7 @@ import Navbar from './components/Navbar';
 import CreateProduct from './pages/CreateProduct';
 import ProductList from './pages/ProductList';
 import OrderList from './pages/OrderList';
+import EditProduct from './pages/EditProduct';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/products/create" component={CreateProduct} />
+        <Route exact path="/products/edit/:productId" component={EditProduct} />
         <Route exact path="/products/productlist" component={ProductList} />
         <Route exact path="/products/:productId" component={ProductDetails} />
         <Route exact path="/cart" component={ProductCart} />

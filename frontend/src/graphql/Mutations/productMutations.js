@@ -5,12 +5,16 @@ export const PRODUCT_CREATE = gql`
         createProduct(file: $file, name: $name, description: $description, category: $category, brand: $brand, price: $price, countInStock: $countInStock) {
             id
             name
-            description
             image
-            category
-            brand
             price
-            countInStock
+        }
+    }
+`;
+
+export const PRODUCT_DELETE = gql`
+    mutation Product($id: ID!, $filename: String!){
+        deleteProduct(id: $id, filename: $filename) {
+            message
         }
     }
 `;

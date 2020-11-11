@@ -1,7 +1,15 @@
 import React from 'react';
 import Products from '../components/Products';
+import { useQuery } from "@apollo/client";
+import { PRODUCTS } from "../graphql/Queries/productQueries";
+// import { ME } from '../graphql/Queries/userQueries';
 
 function Home() {
+    // const user = useApolloClient().readQuery({query: ME});
+    // console.log(user);
+    
+    const { loading, error, data } = useQuery(PRODUCTS);
+
     return (
         <div id="home-container">
             <div className="product-list">
@@ -22,12 +30,12 @@ function Home() {
                 </div>
 
                 <div className="product-container">
-                    <Products/>
-                    <Products/>
-                    <Products/>
-                    <Products/>
-                    <Products/>
-                    <Products/>
+                    { loading && loading }
+                    {error && console.log(error.graphQLErrors[0].extensions)}
+                    { data && data.products.map(product => {
+                        return <Products key={product.id} product={product}/>
+                    })
+                    }
                 </div>
             </div>
         </div>
