@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useMutation, useQuery } from "@apollo/client";
+import React, { useState } from 'react';
+import { useMutation} from "@apollo/client";
 import { PRODUCT_DELETE } from "../graphql/Mutations/productMutations";
+import { PRODUCTS } from '../graphql/Queries/productQueries';
 
 function Item({ product: { id, image, name, price, brand, category }, history }) {
     const [deleteProduct] = useMutation(PRODUCT_DELETE);
 
     const [errors, setErrors] = useState("");
-    // const [id, setId] = useState("");
-    // const [filename, setFilename] = useState("");
 
     const onClick = async () => {
         try {
@@ -16,24 +15,24 @@ function Item({ product: { id, image, name, price, brand, category }, history })
                     id,
                     filename: image
                 },
-                update: async (cache, { data: { createProduct } }) => {
-                    // const existingProducts = await cache.readQuery({
-                    //     query: PRODUCTS
-                    // });
-
-                    // const newProduct = createProduct;
-
-                    // cache.writeQuery({
-                    //     query: PRODUCTS,
-                    //     data: {
-                    //         products: [newProduct, ...existingProducts.products]
-                    //     }
-                    // });
-
-                    setErrors("");
-                    history.push({
-                        pathname: "/"
+                update: (cache) => {
+                    const existingProducts = cache.readQuery({
+                        query: PRODUCTS
                     });
+
+                    cache.evict({
+                        fieldName: "notifications",
+                        broadcast: false
+                    });
+
+                    cache.writeQuery({
+                        query: PRODUCTS,
+                        data: {
+                            products: existingProducts.products.filter((product) => product.id !== id)
+                        }
+                    });
+                    
+                    setErrors("");
                 },
             });
         } catch (error) {

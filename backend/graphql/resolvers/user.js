@@ -24,7 +24,7 @@ module.exports = {
                 }
             }
 
-            throw new AuthenticationError("Token needed !!!");
+            // throw new AuthenticationError("Token needed !!!");
 
             // if(req.session.jwt) {
             //     try {
@@ -170,7 +170,22 @@ module.exports = {
                 ...user._doc,
                 token: tokenGenerator(user._id, user.username, user.email, user.isAdmin, req)
             }
-        }
+        },
 
+        // Log user Out
+        async logOut (_, __, { req, res }) {
+            console.log("Log out mutation hit !!!");
+
+            req.session.destroy((err) => {
+                if(err) {
+                    return err;
+                }
+            });
+            res.clearCookie("jwt");
+
+            return {
+                message: "Log Out Successfully Mate !!!"
+            }
+        }
     }
 }

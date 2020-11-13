@@ -17,5 +17,6 @@ module.exports = gql `
         login(email: String!, password: String!): User!
         register(username: String!, email: String!, password: String!, confirmPassword: String!): User!
         registerAdmin(username: String!, email: String!, password: String!, confirmPassword: String!): User!
+        logOut: Message!
     }
 `;

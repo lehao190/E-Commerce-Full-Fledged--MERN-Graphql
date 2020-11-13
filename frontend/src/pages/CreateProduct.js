@@ -23,7 +23,7 @@ function CreateProduct(props) {
         },
     }) {
         if (validity.valid) setUpload(file);
-    }
+    };
 
     const onSubmit = async(e) => {
         e.preventDefault();
@@ -44,20 +44,25 @@ function CreateProduct(props) {
                         query: PRODUCTS
                     });
 
+                    cache.evict({
+                        fieldName: "notifications",
+                        broadcast: false
+                    });
+
                     const newProduct = createProduct;
 
                     cache.writeQuery({
                         query: PRODUCTS,
                         data: {
                             products: [newProduct, ...existingProducts.products]
-                        }
+                        },
                     });
 
                     setErrors("");
                     
                     props.history.push({
                         pathname: "/"
-                    });
+                    });  
                 },
             });
         } catch (error) {

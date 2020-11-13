@@ -1,23 +1,37 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { useQuery} from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { ME } from "../graphql/Queries/userQueries";
-// import Cookies from "js-cookie";
+import { LOGOUT } from "../graphql/Mutations/userMutations";
+import Cookies from "js-cookie";
 
 // Navigation Bar
 function Navbar() {
-    // if(!Cookies.getJSON("isLoggedIn")) {
-    //     Cookies.set("isLoggedIn", { state: false });
-    // } 
+    if(!Cookies.getJSON("isLoggedIn")) {
+        Cookies.set("isLoggedIn", { state: false });
+    } 
 
-    // const loggedIn = Cookies.getJSON("isLoggedIn");
+    const loggedIn = Cookies.getJSON("isLoggedIn");
 
     // useQuery(ME, {
     //    skip: user,
     //    fetchPolicy: user && loggedIn.state === true ? "network-only" : !user && loggedIn.state === true ? "cache-first" : "cache-only"
     // });
-    const { data } = useQuery(ME);
 
+    const { data, client } = useQuery(ME, {
+        fetchPolicy: "cache-and-network"
+    });
+
+    const [logOut] = useMutation(LOGOUT);
+
+    const onClick = async () => {
+        try {
+            await logOut();
+        } catch (error) {
+            return null;
+        }
+    }
+   
     return (
         <nav id="navbar">
             <div>
@@ -32,32 +46,28 @@ function Navbar() {
                     </div>
 
                     {
-                        // user ?
-                        //     <div className="navbar-login">
-                        //         {user.me.username}
-                        //         <div className="user-options">
-                        //             <div><Link to="/products/create">Admin</Link></div>
-                        //             <div><Link to="/products/create">Sản Phẩm</Link></div>
-                        //             <div>Đăng Xuất</div>
-                        //         </div>
-                        //     </div>
-                        //     :
-                        //     <div className="navbar-login">
-                        //         <Link to="/login">Đăng Nhập</Link>
-                        //     </div>
-                        data ?
+                        loggedIn.state === false &&
+                        <div className="navbar-login">
+                            <Link to="/login">Đăng Nhập</Link>
+                        </div>
+                    }
+                    {
+                        data &&
                             <div className="navbar-login">
-                                {data.me.username}
+                                {data.me && data.me.username}
                                 <div className="user-options">
                                     <div><Link to="/products/create">Admin</Link></div>
                                     <div><Link to="/products/productlist">Sản Phẩm</Link></div>
-                                    <div>Đăng Xuất</div>
+                                    <div onClick={() => {
+                                        onClick().then(() => {
+                                            Cookies.set("isLoggedIn", { state: false });
+                                            client.resetStore().catch(err => {
+                                                return null;
+                                            });
+                                        })
+                                    }}>Đăng Xuất</div>
                                 </div>
-                            </div>
-                            :
-                            <div className="navbar-login">
-                                <Link to="/login">Đăng Nhập</Link>
-                            </div>
+                            </div>        
                     }
                 </div>
             </div>

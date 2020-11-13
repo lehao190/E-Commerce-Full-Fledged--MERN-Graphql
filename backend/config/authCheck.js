@@ -1,4 +1,5 @@
 const User = require("../models/userSchema");
+const { AuthenticationError } = require("apollo-server-express");
 
 module.exports = {
     // Check For JWT Token
@@ -16,6 +17,8 @@ module.exports = {
                 throw error;
             }
         }
+        
+        throw new AuthenticationError("Token needed !!!");
     },
 
 }

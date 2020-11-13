@@ -1,12 +1,18 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import Item from '../components/Item';
+import { ME } from "../graphql/Queries/userQueries";
 import { PRODUCTS } from "../graphql/Queries/productQueries";
+import { Link } from 'react-router-dom';
 
 function ProductList(props) {
-    const { loading, data: { products } } = useQuery(PRODUCTS, {
-        fetchPolicy: "cache-first"
-    });
+    const { data: user } = useQuery(ME);
+
+    const { loading, data } = useQuery(PRODUCTS);
+    
+    if(user && !user.me.isAdmin) return <div>Not admin</div>
+    
+    if(!user) return <div>No User Found</div>
 
     return (
         <div id="product-list-container">
@@ -16,7 +22,7 @@ function ProductList(props) {
                 </div>
 
                 <div>
-                    <div>+ TẠO SẢN PHẨM</div>
+                    <div><Link to="/products/create" style={{color: "white"}}>+ TẠO SẢN PHẨM</Link></div>
                 </div>
             </div>
 
@@ -34,7 +40,7 @@ function ProductList(props) {
 
                     <tbody>
                         {loading && loading}
-                        {products && products.map((product) => {
+                        {data && data.products.map((product) => {
                             return <Item key={product.id} product={product} history={props.history}/>
                         })}
                     </tbody>
