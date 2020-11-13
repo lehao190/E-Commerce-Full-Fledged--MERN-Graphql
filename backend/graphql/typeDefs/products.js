@@ -32,6 +32,7 @@ module.exports = gql `
     extend type Query {
         uploads: [File]
         products: [Product]
+        product(id: ID!): Product
     }
 
 `;

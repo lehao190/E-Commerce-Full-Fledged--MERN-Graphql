@@ -20,6 +20,39 @@ module.exports = {
             }
 
             return products;
+        },
+
+        // Get one product
+        async product(_, { id: productId }) {
+            console.log("One Product Query get called !!!");
+
+            const { 
+                id, 
+                name, 
+                description, 
+                image, 
+                category, 
+                brand, 
+                price, 
+                countInStock,
+                createdAt,
+                updatedAt
+            } = await Product.findOne({
+                _id: productId
+            });
+
+            return {
+                id,
+                name, 
+                description,
+                image,
+                category, 
+                brand, 
+                price, 
+                countInStock,
+                createdAt,
+                updatedAt
+            }
         }
 
         //    uploads() {

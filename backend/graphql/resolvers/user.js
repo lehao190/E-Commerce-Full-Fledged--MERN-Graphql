@@ -1,7 +1,7 @@
 const { validLogin, validRegister } = require("../../config/validate");
 const { tokenGenerator, tokenValidator } = require("../../config/jwtAuth");
 const bcrypt = require("bcryptjs");
-const { AuthenticationError, UserInputError } = require("apollo-server-express"); 
+const { UserInputError } = require("apollo-server-express"); 
 const User = require("../../models/userSchema");
 const { checkAuth } = require("../../config/authCheck");
 
