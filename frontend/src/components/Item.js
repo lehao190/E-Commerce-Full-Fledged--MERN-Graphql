@@ -47,32 +47,35 @@ function Item({ product: { id, image, name, price, brand, category }, history })
 
             <td>
                 {errors && errors.isAdmin}
-                {/* <h1>5a428asdac155a</h1> */}
                 <h1>{id}</h1>
             </td>
 
             <td>
-                {/* <h1>Berus version 2.2</h1> */}
                 <h1>{name}</h1>
             </td>
 
             <td>
-                {/* <h1>$ 89</h1> */}
                 <h1>$ {price}</h1>
             </td>
 
             <td>
-                {/* <h1>Electronics</h1> */}
                 <h1>{category}</h1>
             </td>
 
             <td>
-                {/* <h1>AWS</h1> */}
                 <h1>{brand}</h1>
             </td>
 
             <td>
-                <span className="edit"><i className="far fa-edit"></i></span>
+                <span onClick={
+                    () => {
+                        history.push({
+                            pathname: `/products/edit/${id}`
+                        });
+                    }
+                } className="edit">
+                    <i className="far fa-edit"></i>
+                </span>
                 <span onClick={onClick} className="delete"><i className="fas fa-trash"></i></span>
             </td>
         </tr>

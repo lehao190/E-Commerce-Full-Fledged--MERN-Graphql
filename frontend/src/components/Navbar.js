@@ -42,7 +42,7 @@ function Navbar() {
             <div>
                 <div>
                     <div className="navbar-cart">
-                        <Link to="/">Giỏ Hàng</Link>
+                        <Link to="/cart">Giỏ Hàng</Link>
                     </div>
 
                     {

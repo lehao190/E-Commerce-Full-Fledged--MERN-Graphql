@@ -22,7 +22,7 @@ module.exports = {
             return products;
         },
 
-        // Get one product
+        // Get one product 
         async product(_, { id: productId }) {
             console.log("One Product Query get called !!!");
 
@@ -137,6 +137,7 @@ module.exports = {
             };
         },
 
+        // Delete Product
         async deleteProduct(_, { id, filename }, { req }) {
             console.log("Delete Product Mutation called !!!");
 
@@ -164,6 +165,102 @@ module.exports = {
 
             return {
                 message: "Delete Product Successfully !!!"
+            }
+        },
+
+        // Update Product
+        async updateProduct(_, { id, file, description, name, category, brand, price, countInStock }, { req }) {
+            console.log("Update Product Mutation get Called !!!");
+            
+            // Check for token
+            const user = await checkAuth(req, tokenValidator);
+
+            // Check if user is Admin
+            if(!user.isAdmin) {
+                throw new UserInputError("Errors in creating product", {
+                    errors: {
+                        isAdmin: "Không phải Admin"
+                    }
+                })
+            }
+
+            // Check inputs
+            const { errors, valid } = validCreateProduct(description, name, category, brand, price, countInStock);
+            
+            if(!valid) {
+                throw new UserInputError("Errors occured when create product", {
+                    errors
+                });
+            }
+
+            const { createReadStream, filename, mimetype, encoding } = await file;
+
+            // File Path
+            const streamPath = `${Math.random()}${filename}`;
+
+            await new Promise((resolve, reject) => {
+                const stream = createReadStream();
+                stream.pipe(fileStream.createWriteStream("./public/images/" + streamPath)).on("finish", () => {
+                    resolve();
+                }).on("error", (err) => reject(err));
+            });
+
+            // Check for file Size Validation
+            const fileSize = fileStream.statSync("./public/images/" + streamPath);
+
+            if(fileSize.size >  2000000.0) {
+                // Delete File On Error 
+                fileStream.unlink("./public/images/" + streamPath, (err) => {
+                    if(err) throw err;
+                    console.log("Delete File Successfully: ", streamPath);
+                });
+
+                throw new UserInputError("File Exceeded 2MB", {
+                    errors: {
+                        file: "File vượt quá 2MB"
+                    }
+                });
+            }
+
+            let product = await Product.findOne({
+                _id: id
+            });
+
+            if(!product) {
+                throw new UserInputError("No Product Found", {
+                    errors: {
+                        product: "Không có sản phẩm nào cả !!!"
+                    }
+                });
+            }
+
+            // Find older and delete file on updating
+            fileStream.unlink("./public/images/" + product.image, (err) => {
+                if(err) throw err;
+                console.log("Delete File Successfully: ", product.image);
+            });
+
+            product = await Product.findOneAndUpdate(
+                {
+                    _id: id
+                },
+                {
+                    image: streamPath, 
+                    description, 
+                    name, 
+                    category, 
+                    brand, 
+                    price, 
+                    countInStock
+                },
+                {
+                    new: true
+                }
+            );
+
+            return {
+                id: product._id,
+                ...product._doc
             }
         }
     }

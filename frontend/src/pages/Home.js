@@ -2,12 +2,8 @@ import React from 'react';
 import Products from '../components/Products';
 import { useQuery } from "@apollo/client";
 import { PRODUCTS } from "../graphql/Queries/productQueries";
-// import { ME } from '../graphql/Queries/userQueries';
 
 function Home() {
-    // const user = useApolloClient().readQuery({query: ME});
-    // console.log(user);
-    
     const { loading, error, data } = useQuery(PRODUCTS);
 
     return (

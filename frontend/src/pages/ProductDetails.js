@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserReviews from '../components/UserReviews';
 import { useQuery } from "@apollo/client";
 import { PRODUCT } from "../graphql/Queries/productQueries";
+import Cookies from "js-cookie";
 
 function ProductDetails(props) {
+    const [count, setCount] = useState(0);
+
     const { loading, error, data } = useQuery(PRODUCT, {
         variables: {
             id: props.match.params.productId
@@ -21,6 +24,44 @@ function ProductDetails(props) {
         WebkitBackgroundClip: "text",
         backgroundClip: "text",
         color: "transparent",
+    };
+
+    const onClick = () => {
+        const cartItems = Cookies.getJSON("cartItems");
+        
+        if(cartItems) {
+            const existingItems = cartItems.filter(cartItem => {
+                return cartItem.id !== data.product.id
+            });
+
+            Cookies.set("cartItems", [
+                ...existingItems,
+                {
+                    brand: data.product.brand,
+                    category: data.product.category,
+                    countInStock: count,
+                    description: data.product.description,
+                    id: data.product.id,
+                    image: data.product.image,
+                    name: data.product.name,
+                    price: data.product.price,
+                }
+            ]);
+        }
+        else {
+            Cookies.set("cartItems", [
+                {
+                    brand: data.product.brand,
+                    category: data.product.category,
+                    countInStock: count,
+                    description: data.product.description,
+                    id: data.product.id,
+                    image: data.product.image,
+                    name: data.product.name,
+                    price: data.product.price,
+                }
+            ]);
+        }
     };
 
     if(loading) return <div>Đang lấy dữ liệu...</div>
@@ -100,14 +141,14 @@ function ProductDetails(props) {
                                 <tr>
                                     <td>
                                         <h1>Số lượng: </h1>
-                                        <input type="number" min="0"/>
+                                        <input type="number" min={0} onChange={ e => setCount(e.target.value) }/>
                                     </td>
                                 </tr>
     
                                 <tr>
                                     <td>
                                         <button>
-                                            <Link to="/cart" style={{
+                                            <Link onClick={onClick} to="/cart" style={{
                                                 color: "white",
                                                 width: "100%",
                                                 display: "block"

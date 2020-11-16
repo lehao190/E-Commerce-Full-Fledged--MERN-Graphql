@@ -8,7 +8,9 @@ import { Link } from 'react-router-dom';
 function ProductList(props) {
     const { data: user } = useQuery(ME);
 
-    const { loading, data } = useQuery(PRODUCTS);
+    const { loading, data } = useQuery(PRODUCTS, {
+        skip: !user || !user.me.isAdmin
+    });
     
     if(user && !user.me.isAdmin) return <div>Not admin</div>
     
