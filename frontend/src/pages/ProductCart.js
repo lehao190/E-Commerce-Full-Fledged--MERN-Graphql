@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link } from "react-router-dom";
 import CartProducts from '../components/CartProducts';
-import Cookies from "js-cookie";
+import { cartItemsContext } from '../context/cartItemsContext';
 
 function ProductCart() {
-    const cartItems = Cookies.getJSON("cartItems");
+    // Context api
+    const cartContext = useContext(cartItemsContext);
 
-    useEffect(() => {
-        console.log(cartItems);
-    }, [cartItems]);
-
-    if(!cartItems) {
-        return !cartItems && <div>Không có món hàng nào !!!!</div>
+    if(cartContext.cartItems.length === 0) {
+        return <div style={{
+            fontWeight: "bold",
+            fontSize: "1.5rem",
+            textAlign: "center"
+        }}>Không có món hàng nào !!!!</div>
     }
 
-    if(cartItems){
+    if(cartContext.cartItems){
         return (
             <div id="cart-container">
                 <div className="cart">
@@ -22,9 +23,9 @@ function ProductCart() {
                         <h1>GIỎ HÀNG</h1>
                     </div>
                     {   
-                        cartItems &&
-                        cartItems.map((cartItem) => {
-                            return <CartProducts key={cartItem.id} cartItem={cartItem}/>
+                        cartContext.cartItems &&
+                        cartContext.cartItems.map((cartItem) => {
+                            return <CartProducts key={cartItem.id} cartItem={cartItem} inputs={true}/>
                         })
                     }
                 </div>
@@ -34,14 +35,14 @@ function ProductCart() {
                         <thead>
                             <tr>
                                 <td><h1>TỔNG ({
-                                        cartItems.reduce((a ,b) => {
+                                        cartContext.cartItems.reduce((a ,b) => {
                                             return Number(b.countInStock) + a; 
                                         }, 0)
                                     }) MÓN</h1></td>
                             </tr>
                             <tr>
                                 <td><h1>$ {
-                                    cartItems.reduce((a ,b) => {
+                                    cartContext.cartItems.reduce((a ,b) => {
                                         return Number(b.price) * Number(b.countInStock) + a; 
                                     }, 0)}
                                 </h1></td>

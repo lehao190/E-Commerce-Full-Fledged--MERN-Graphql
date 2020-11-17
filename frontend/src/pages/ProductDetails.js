@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserReviews from '../components/UserReviews';
 import { useQuery } from "@apollo/client";
 import { PRODUCT } from "../graphql/Queries/productQueries";
-import Cookies from "js-cookie";
+import { cartItemsContext } from '../context/cartItemsContext';
+import { ADD_ITEM } from '../actions/cartItemsActions';
 
 function ProductDetails(props) {
+    // Cart Items Context
+    const cartContext = useContext(cartItemsContext);
+
     const [count, setCount] = useState(0);
 
     const { loading, error, data } = useQuery(PRODUCT, {
@@ -27,41 +31,84 @@ function ProductDetails(props) {
     };
 
     const onClick = () => {
-        const cartItems = Cookies.getJSON("cartItems");
-        
-        if(cartItems) {
-            const existingItems = cartItems.filter(cartItem => {
-                return cartItem.id !== data.product.id
-            });
+        cartContext.cartItemsDispatch({
+            type: ADD_ITEM,
+            payload: {
+                brand: data.product.brand,
+                category: data.product.category,
+                countInStock: count,
+                description: data.product.description,
+                id: data.product.id,
+                image: data.product.image,
+                name: data.product.name,
+                price: data.product.price,
+            }
+        });
 
-            Cookies.set("cartItems", [
-                ...existingItems,
-                {
-                    brand: data.product.brand,
-                    category: data.product.category,
-                    countInStock: count,
-                    description: data.product.description,
-                    id: data.product.id,
-                    image: data.product.image,
-                    name: data.product.name,
-                    price: data.product.price,
-                }
-            ]);
-        }
-        else {
-            Cookies.set("cartItems", [
-                {
-                    brand: data.product.brand,
-                    category: data.product.category,
-                    countInStock: count,
-                    description: data.product.description,
-                    id: data.product.id,
-                    image: data.product.image,
-                    name: data.product.name,
-                    price: data.product.price,
-                }
-            ]);
-        }
+
+        // const cartItems = Cookies.getJSON("cartItems");
+
+        // cartContext.cartItemsDispatch({
+        //     type: ADD_ITEM,
+        //     payload: {
+        //         brand: data.product.brand,
+        //         category: data.product.category,
+        //         countInStock: count,
+        //         description: data.product.description,
+        //         id: data.product.id,
+        //         image: data.product.image,
+        //         name: data.product.name,
+        //         price: data.product.price,
+        //     }
+        // });
+        
+        // if(cartItems) {
+        //     const existingItems = cartItems.filter(cartItem => {
+        //         return cartItem.id !== data.product.id
+        //     });
+
+        //     Cookies.set("cartItems", [
+        //         ...existingItems,
+        //         {
+        //             brand: data.product.brand,
+        //             category: data.product.category,
+        //             countInStock: count,
+        //             description: data.product.description,
+        //             id: data.product.id,
+        //             image: data.product.image,
+        //             name: data.product.name,
+        //             price: data.product.price,
+        //         }
+        //     ]);
+        // }
+        // else {
+        //     Cookies.set("cartItems", [
+        //         {
+        //             brand: data.product.brand,
+        //             category: data.product.category,
+        //             countInStock: count,
+        //             description: data.product.description,
+        //             id: data.product.id,
+        //             image: data.product.image,
+        //             name: data.product.name,
+        //             price: data.product.price,
+        //         }
+        //     ]);
+
+        //     // cartContext.cartItemsDispatch({
+        //     //     type: ADD_ITEM,
+        //     //     payload: {
+        //     //         brand: data.product.brand,
+        //     //         category: data.product.category,
+        //     //         countInStock: count,
+        //     //         description: data.product.description,
+        //     //         id: data.product.id,
+        //     //         image: data.product.image,
+        //     //         name: data.product.name,
+        //     //         price: data.product.price,
+        //     //     }
+        //     // });
+        // }
     };
 
     if(loading) return <div>Đang lấy dữ liệu...</div>

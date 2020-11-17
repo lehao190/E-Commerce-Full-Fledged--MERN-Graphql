@@ -1,32 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import Cookies from "js-cookie";
+import React, { useState, useContext } from 'react';
+import { cartItemsContext } from '../context/cartItemsContext';
+import { ADD_ITEM, REMOVE_ITEM } from '../actions/cartItemsActions';
 
-function CartProducts({ cartItem: { id, name, price, countInStock, image, brand, category, description } }) {
+function CartProducts({ cartItem: { id, name, price, countInStock, image, brand, category, description }, inputs }) {
     const [itemcount, setItemCount] = useState(countInStock);
     
-    useEffect(() => {
-        const cartItems = Cookies.getJSON("cartItems");
+    const cartContext = useContext(cartItemsContext);
 
-        if(cartItems) {
-            const existingItems = cartItems.filter(cartItem => {
-                return cartItem.id !== id
-            });
-
-            Cookies.set("cartItems", [
-                ...existingItems,
-                {
-                    brand,
-                    category,
-                    countInStock: itemcount,
-                    description,
-                    id,
-                    image,
-                    name,
-                    price,
-                }
-            ]);
-        }
-    }, [itemcount, id, brand, category, description, image, name, price]);
+    const onClick = () => {
+        cartContext.cartItemsDispatch({
+            type: REMOVE_ITEM,
+            payload: {
+                id
+            }
+        });
+    };
 
     return (
         <div className="cart-products">
@@ -45,13 +33,34 @@ function CartProducts({ cartItem: { id, name, price, countInStock, image, brand,
                     <h1>${price}</h1>
                 </div>
 
-                <div className="cart-product-qty">
-                    <input type="number" min="0" value={itemcount} onChange={ e => setItemCount(e.target.value) }/>
+                {
+                    inputs &&
+                    <>
+                    <div className="cart-product-qty">
+                    <input type="number" min="0" value={itemcount} onChange={ e => {
+                        setItemCount(e.target.value);
+                  
+                        cartContext.cartItemsDispatch({
+                            type: ADD_ITEM,
+                            payload: {
+                                brand,
+                                category,
+                                countInStock: e.target.value,
+                                description,
+                                id,
+                                image,
+                                name,
+                                price
+                            }
+                        });
+                    } }/>
                 </div>
 
                 <div className="cart-product-delete">
-                    <i className="fas fa-trash"></i>
+                    <i onClick={onClick} className="fas fa-trash"></i>
                 </div>
+                    </>
+                }
             </div>
         </div>
     )
