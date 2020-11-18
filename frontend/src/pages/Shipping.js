@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { useQuery } from "@apollo/client";
-import { ME } from "../graphql/Queries/userQueries";
+import React, { useState, useEffect } from 'react';
 import Cookies from "js-cookie";
 
 function Shipping(props) {
-    const { loading, data } = useQuery(ME);
+    const isLoggedIn = Cookies.getJSON("isLoggedIn");
 
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
@@ -26,11 +24,11 @@ function Shipping(props) {
         });
     }
 
-    if(loading) return <div>Đang Kiểm Tra ...</div>
-
-    if(!data) props.history.push({
-        pathname: "/login"
-    });
+    useEffect(() => {
+        if(!isLoggedIn.state) props.history.push({
+            pathname: "/login"
+        });
+    }, [isLoggedIn.state, props.history]);
 
     return (
         <div className="wrapper">

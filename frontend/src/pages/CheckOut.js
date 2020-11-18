@@ -1,8 +1,31 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import CartProducts from '../components/CartProducts';
 import Paypal from "../components/paypal";
+import { cartItemsContext } from '../context/cartItemsContext';
+import Cookies from "js-cookie";
 
 function CheckOut(props) {
+    const isLoggedIn = Cookies.getJSON("isLoggedIn");
+
+    useEffect(() => {
+        if(!isLoggedIn.state) props.history.push({
+            pathname: "/login"
+        });
+    }, [isLoggedIn.state, props.history]);
+
+    const cartContext = useContext(cartItemsContext);
+
+    // const shippingAddress = Cookies.getJSON("shipping");
+
+    if(cartContext.cartItems.length === 0) {
+        return <div style={{
+            fontWeight: "bold",
+            fontSize: "1.5rem",
+            textAlign: "center"
+        }}>Không có món hàng nào !!!!</div>
+    }
+
+    if(cartContext.cartItems)
     return (
         <div id="placeorder-container">
             <div className="cart">
@@ -28,11 +51,12 @@ function CheckOut(props) {
                     <h1>GIỎ HÀNG</h1>
                 </div>
 
-                <CartProducts/>
-                <CartProducts/>
-                <CartProducts/>
-                <CartProducts/>
-                <CartProducts/>
+                {   
+                        cartContext.cartItems &&
+                        cartContext.cartItems.map((cartItem) => {
+                            return <CartProducts key={cartItem.id} cartItem={cartItem} inputs={false}/>
+                        })
+                }
             </div>
 
             <div className="cart-checkout">

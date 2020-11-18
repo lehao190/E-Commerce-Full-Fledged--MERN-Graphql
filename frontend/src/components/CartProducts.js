@@ -30,7 +30,7 @@ function CartProducts({ cartItem: { id, name, price, countInStock, image, brand,
                 </div>
 
                 <div className="cart-product-price">
-                    <h1>${price}</h1>
+                    <h1>${price} x {itemcount}</h1>
                 </div>
 
                 {

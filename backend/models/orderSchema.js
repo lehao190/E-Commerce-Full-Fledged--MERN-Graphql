@@ -4,12 +4,10 @@ const orderSchema = new mongoose.Schema(
   {
     orderItems: [
       {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product',
-          required: true,
-        },
-      },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+      }
     ],
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     shipping: {
@@ -20,11 +18,9 @@ const orderSchema = new mongoose.Schema(
     },
     payment: {
       paymentMethod: String,
-      paymentResult: {
-        orderID: String,
-        payerID: String,
-        paymentID: String,
-      },
+      orderId: String,
+      payerId: String,
+      paymentId: String
     },
     totalPrice: Number,
     isPaid: { type: Boolean, required: true, default: false },

@@ -1,19 +1,60 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import CartProducts from '../components/CartProducts';
 import { cartItemsContext } from '../context/cartItemsContext';
 import Cookies from "js-cookie";
+import { useMutation } from "@apollo/client";
+import { ORDER_CREATE } from '../graphql/Mutations/orderMutations';
 
 function PlaceOrder(props) {
+    const isLoggedIn = Cookies.getJSON("isLoggedIn");
+
+    // Check if user Logged In
+    useEffect(() => {
+        if(!isLoggedIn.state) props.history.push({
+            pathname: "/login"
+        });
+    }, [isLoggedIn.state, props.history]);
+
+    // Get Cart Items from Store
     const cartContext = useContext(cartItemsContext);
 
+    // Shipping address
     const shippingAddress = Cookies.getJSON("shipping");
 
-    const onSubmit = (e) => {
+    // Create Order
+    const [orderCreate, { data, error, loading }] = useMutation(ORDER_CREATE);
+
+    const onSubmit = async (e) => {
         e.preventDefault();
 
-        props.history.push({
-            pathname: "/checkout/Oad089ab421"
-        });
+        try {
+            await orderCreate({
+                variables: {
+                    productIds: cartContext.cartItems.map(x =>  x.id),
+                    address: shippingAddress.address,
+                    city: shippingAddress.city,
+                    postalCode: shippingAddress.postal,
+                    country: shippingAddress.country,
+                    paymentMethod: "Paypal",
+                    totalPrice: cartContext.cartItems.reduce((a ,b) => {
+                        return Number(b.price) * Number(b.countInStock) + a; 
+                    }, 0)
+                },
+                update: () => {
+                    console.log(data);
+                    console.log(error);
+                    console.log(loading);
+                    console.log(shippingAddress)
+                }
+            });
+        } catch (error) {
+            console.log(error.graphQLErrors[0].extensions);
+            return null;
+        }
+
+        // props.history.push({
+        //     pathname: "/checkout/Oad089ab421"
+        // });
     }; 
 
     if(cartContext.cartItems.length === 0) {
