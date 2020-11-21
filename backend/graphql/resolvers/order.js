@@ -6,16 +6,16 @@ const { UserInputError } = require("apollo-server-express");
 module.exports = {
     Query: {
         async orders() {
-            const a = await Order.find();
+            const orders = await Order.find();
             
-            return a
+            return orders;
         }
     },
 
     Mutation: {
         // Create User's Order
         async createOrder(_, {
-            productIds,
+            orderItems,
             address,
             city,
             postalCode,
@@ -39,7 +39,7 @@ module.exports = {
 
             const order = new Order({
                 orderItems: [
-                    ...productIds
+                    ...orderItems
                 ],
                 user: user.id,
                 shipping: {
@@ -58,10 +58,17 @@ module.exports = {
 
             const newOrder = await Order.findOne({
                 _id: order.id
-            }).populate("orderItems").populate("user");
+            }).populate({
+                path: "orderItems",
+                populate: {
+                    path: "product",
+                    model: "Product"
+                }
+            }).populate("user");
 
             return {
-                ...newOrder._doc,
+                id: newOrder._id,
+                ...newOrder._doc
             }
         }
     }

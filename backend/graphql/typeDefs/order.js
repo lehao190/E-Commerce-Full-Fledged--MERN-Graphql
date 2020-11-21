@@ -16,6 +16,7 @@ module.exports = gql`
     }
     
     type Order {
+        id: ID!
         orderItems: [Product]
         user: User!
         shipping: Shipping!
@@ -27,9 +28,14 @@ module.exports = gql`
         deliveredAt: String
     }
 
+    input InputOrderItems {
+        product: ID!
+        quantity: Int!
+    }
+
     extend type Mutation {
         createOrder(
-            productIds: [ID]!
+            orderItems: [InputOrderItems]
             address: String!
             city: String!
             postalCode: String!

@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const ORDER_CREATE = gql`
-    mutation Order( 
-            $productIds: [ID]!,
+    mutation Order(
+            $orderItems: [InputOrderItems],
             $address: String!,
             $city: String!,
             $postalCode: String!,
@@ -11,8 +11,8 @@ export const ORDER_CREATE = gql`
             $totalPrice: Float!
             )
             {
-                createOrder( 
-                    productIds: $productIds,
+                createOrder(
+                    orderItems: $orderItems,
                     address: $address,
                     city: $city,
                     postalCode: $postalCode,
@@ -21,6 +21,7 @@ export const ORDER_CREATE = gql`
                     totalPrice: $totalPrice
                 )
                 {
+                    id
                     totalPrice
                     isPaid
                     paidAt
@@ -31,6 +32,21 @@ export const ORDER_CREATE = gql`
                         city
                         postalCode
                         country
+                    }
+                    payment {
+                        paymentMethod
+                    }
+                    orderItems {
+                        id
+                        name
+                        image
+                        price
+                    }
+                    user {
+                        id
+                        username
+                        email
+                        isAdmin
                     }
                 }
             }

@@ -37,28 +37,28 @@ function CartProducts({ cartItem: { id, name, price, countInStock, image, brand,
                     inputs &&
                     <>
                     <div className="cart-product-qty">
-                    <input type="number" min="0" value={itemcount} onChange={ e => {
-                        setItemCount(e.target.value);
-                  
-                        cartContext.cartItemsDispatch({
-                            type: ADD_ITEM,
-                            payload: {
-                                brand,
-                                category,
-                                countInStock: e.target.value,
-                                description,
-                                id,
-                                image,
-                                name,
-                                price
-                            }
-                        });
-                    } }/>
-                </div>
+                        <input type="number" min="0" value={itemcount} onChange={ e => {
+                            setItemCount(e.target.value);
+                    
+                            cartContext.cartItemsDispatch({
+                                type: ADD_ITEM,
+                                payload: {
+                                    brand,
+                                    category,
+                                    countInStock: e.target.value,
+                                    description,
+                                    id,
+                                    image,
+                                    name,
+                                    price
+                                }
+                            });
+                        } }/>
+                    </div>
 
-                <div className="cart-product-delete">
-                    <i onClick={onClick} className="fas fa-trash"></i>
-                </div>
+                    <div className="cart-product-delete">
+                        <i onClick={onClick} className="fas fa-trash"></i>
+                    </div>
                     </>
                 }
             </div>

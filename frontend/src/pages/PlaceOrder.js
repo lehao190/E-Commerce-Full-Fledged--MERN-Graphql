@@ -22,7 +22,7 @@ function PlaceOrder(props) {
     const shippingAddress = Cookies.getJSON("shipping");
 
     // Create Order
-    const [orderCreate, { data, error, loading }] = useMutation(ORDER_CREATE);
+    const [orderCreate] = useMutation(ORDER_CREATE);
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -30,7 +30,12 @@ function PlaceOrder(props) {
         try {
             await orderCreate({
                 variables: {
-                    productIds: cartContext.cartItems.map(x =>  x.id),
+                    orderItems: cartContext.cartItems.map(cartItem => {
+                        return {
+                            product: cartItem.id,
+                            quantity: Number(cartItem.countInStock)
+                        }
+                    }),
                     address: shippingAddress.address,
                     city: shippingAddress.city,
                     postalCode: shippingAddress.postal,
@@ -40,21 +45,18 @@ function PlaceOrder(props) {
                         return Number(b.price) * Number(b.countInStock) + a; 
                     }, 0)
                 },
-                update: () => {
-                    console.log(data);
-                    console.log(error);
-                    console.log(loading);
-                    console.log(shippingAddress)
+                update: (_, { data: { createOrder } }) => {
+                    console.log(createOrder);
+
+                    props.history.push({
+                        pathname: `/checkout/${createOrder.id}`
+                    });
                 }
             });
         } catch (error) {
             console.log(error.graphQLErrors[0].extensions);
             return null;
         }
-
-        // props.history.push({
-        //     pathname: "/checkout/Oad089ab421"
-        // });
     }; 
 
     if(cartContext.cartItems.length === 0) {
