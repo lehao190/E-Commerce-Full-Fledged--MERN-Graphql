@@ -37,10 +37,14 @@ export const ORDER_CREATE = gql`
                         paymentMethod
                     }
                     orderItems {
-                        id
-                        name
-                        image
-                        price
+                        product {
+                            id
+                            name
+                            image
+                            category
+                            brand
+                        }
+                        quantity
                     }
                     user {
                         id

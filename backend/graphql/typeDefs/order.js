@@ -14,10 +14,16 @@ module.exports = gql`
         payerId: String
         paymentId: String
     }
+
+    type OrderItem {
+        product: Product
+        quantity: Int
+    }
     
     type Order {
         id: ID!
-        orderItems: [Product]
+        # orderItems: [Product]
+        orderItems: [OrderItem]
         user: User!
         shipping: Shipping!
         payment: Payment

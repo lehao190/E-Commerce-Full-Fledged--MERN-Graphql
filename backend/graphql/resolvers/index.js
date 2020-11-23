@@ -1,17 +1,24 @@
 const user = require("./user");
 const products = require("./products");
 const order = require("./order");
-const Product = require("../../models/productSchema");
 const User = require("../../models/userSchema");
+const Order = require("../../models/orderSchema");
 
 module.exports = {
     Order: {
+        // Resolve Order Objects
         async orderItems(order) {
-            const products = await Product.find({
-                _id: order.orderItems.map(orderItem => orderItem.product)
-            })
+            const { orderItems } = await Order.findOne({
+                _id: order._id
+            }).populate({
+                path: "orderItems",
+                populate: {
+                    path: "product",
+                    model: "Product"
+                }
+            }).populate("user");
 
-            return products;
+            return orderItems;
         },
 
         async user(order) {
