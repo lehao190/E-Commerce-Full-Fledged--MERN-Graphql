@@ -2,8 +2,16 @@ import React, { useState, useContext } from 'react';
 import { cartItemsContext } from '../context/cartItemsContext';
 import { ADD_ITEM, REMOVE_ITEM } from '../actions/cartItemsActions';
 
-function CartProducts({ cartItem: { id, name, price, countInStock, image, brand, category, description }, inputs }) {
-    const [itemcount, setItemCount] = useState(countInStock);
+function CartProducts(
+    { 
+        cartItem,
+        orderItem,
+        inputs,
+    }
+
+    ) {
+    
+    const [itemcount, setItemCount] = useState(cartItem && cartItem.countInStock);
     
     const cartContext = useContext(cartItemsContext);
 
@@ -11,7 +19,7 @@ function CartProducts({ cartItem: { id, name, price, countInStock, image, brand,
         cartContext.cartItemsDispatch({
             type: REMOVE_ITEM,
             payload: {
-                id
+                id: cartItem.id
             }
         });
     };
@@ -20,17 +28,36 @@ function CartProducts({ cartItem: { id, name, price, countInStock, image, brand,
         <div className="cart-products">
             <div className="cart-product">
                 <div className="cart-product-image">
-                    <img src={`http://localhost:4000/public/images/${image}`} alt=""/>
+                    {   
+                        cartItem &&
+                        <img src={`http://localhost:4000/public/images/${cartItem.image}`} alt=""/>
+                    }
+
+                    {   
+                        orderItem &&
+                        <img src={`http://localhost:4000/public/images/${orderItem.product.image}`} alt=""/>
+                    }
                 </div>
 
                 <div className="cart-product-name">
                     <h1>
-                       {name}
+                       { cartItem && cartItem.name}
+                       {
+                           orderItem &&
+                           orderItem.product.name
+                       }
                     </h1>
                 </div>
 
                 <div className="cart-product-price">
-                    <h1>${price} x {itemcount}</h1>
+                    {   
+                        cartItem &&
+                        <h1>${cartItem.price} x {itemcount}</h1>
+                    }
+                    {
+                        orderItem &&
+                        <h1>${orderItem.product.price} x {orderItem.quantity}</h1>
+                    }
                 </div>
 
                 {
@@ -43,14 +70,14 @@ function CartProducts({ cartItem: { id, name, price, countInStock, image, brand,
                             cartContext.cartItemsDispatch({
                                 type: ADD_ITEM,
                                 payload: {
-                                    brand,
-                                    category,
+                                    brand: cartItem.brand,
+                                    category: cartItem.category,
                                     countInStock: e.target.value,
-                                    description,
-                                    id,
-                                    image,
-                                    name,
-                                    price
+                                    description: cartItem.description,
+                                    id: cartItem.id,
+                                    image: cartItem.image,
+                                    name: cartItem.name,
+                                    price: cartItem.price
                                 }
                             });
                         } }/>

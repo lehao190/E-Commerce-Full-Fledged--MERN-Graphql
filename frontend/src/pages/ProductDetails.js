@@ -188,7 +188,7 @@ function ProductDetails(props) {
                                 <tr>
                                     <td>
                                         <h1>Số lượng: </h1>
-                                        <input type="number" min={0} onChange={ e => setCount(e.target.value) }/>
+                                        <input type="number" min={0} max={countInStock} onChange={ e => setCount(e.target.value) }/>
                                     </td>
                                 </tr>
     

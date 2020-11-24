@@ -46,8 +46,6 @@ function PlaceOrder(props) {
                     }, 0)
                 },
                 update: (_, { data: { createOrder } }) => {
-                    console.log(createOrder);
-
                     props.history.push({
                         pathname: `/checkout/${createOrder.id}`
                     });

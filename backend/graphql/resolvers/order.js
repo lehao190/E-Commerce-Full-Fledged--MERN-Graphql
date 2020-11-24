@@ -1,17 +1,47 @@
 const Order = require("../../models/orderSchema");
+const Product = require("../../models/productSchema");
 const { tokenValidator } = require("../../config/jwtAuth");
 const { checkAuth } = require("../../config/authCheck");
 const { UserInputError } = require("apollo-server-express");
 
 module.exports = {
+    // Order Queries
     Query: {
+        // Find all orders
         async orders() {
+            console.log("Orders Query get Called !!!");
+
             const orders = await Order.find();
             
             return orders;
+        },
+
+        // Find Order by id
+        async order(_, { id }, { req }) {
+            console.log("Order Query get Called !!!");
+
+            // Check for token
+            const user = await checkAuth(req, tokenValidator);
+
+            // Check if user is Admin
+            if(!user) {
+                throw new UserInputError("Errors when creating order", {
+                    errors: {
+                        isUser: "Người dùng không tồn tại"
+                    }
+                })
+            }
+
+            // find order
+            const order = await Order.findOne({
+                _id: id
+            });
+
+            return order;
         }
     },
 
+    // Order Mutations
     Mutation: {
         // Create User's Order
         async createOrder(_, {
@@ -56,6 +86,28 @@ module.exports = {
 
             await order.save();
 
+            // Update Product's Stock
+            orderItems.forEach(async orderItem => {
+                // Find product
+                const product = await Product.findOne({
+                    _id: orderItem.product
+                });
+
+                // Update The Stock
+                await Product.findOneAndUpdate(
+                    {
+                        _id: orderItem.product
+                    },
+                    {
+                        countInStock: product.countInStock - orderItem.quantity
+                    },
+                    {
+                        new: true
+                    }
+                );
+            })
+
+            // Return the Order
             const newOrder = await Order.findOne({
                 _id: order.id
             }).populate({

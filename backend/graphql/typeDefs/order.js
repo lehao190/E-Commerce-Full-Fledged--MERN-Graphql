@@ -22,7 +22,6 @@ module.exports = gql`
     
     type Order {
         id: ID!
-        # orderItems: [Product]
         orderItems: [OrderItem]
         user: User!
         shipping: Shipping!
@@ -53,5 +52,6 @@ module.exports = gql`
 
     extend type Query {
         orders: [Order]
+        order(id: ID!): Order
     }
 `;

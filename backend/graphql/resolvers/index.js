@@ -21,6 +21,7 @@ module.exports = {
             return orderItems;
         },
 
+        // Resolve User
         async user(order) {
             const user = await User.findOne({
                 _id: order.user
