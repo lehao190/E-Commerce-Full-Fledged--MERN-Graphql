@@ -7,21 +7,19 @@ import Cookies from "js-cookie";
 
 // Navigation Bar
 function Navbar() {
+    // Default state of logging-in
     if(!Cookies.getJSON("isLoggedIn")) {
         Cookies.set("isLoggedIn", { state: false });
     } 
 
     const loggedIn = Cookies.getJSON("isLoggedIn");
 
-    // useQuery(ME, {
-    //    skip: user,
-    //    fetchPolicy: user && loggedIn.state === true ? "network-only" : !user && loggedIn.state === true ? "cache-first" : "cache-only"
-    // });
-
+    // Fetch for user 
     const { data, client } = useQuery(ME, {
         fetchPolicy: "cache-and-network"
     });
 
+    // Log user out
     const [logOut] = useMutation(LOGOUT);
 
     const onClick = async () => {
@@ -56,7 +54,7 @@ function Navbar() {
                             <div className="navbar-login">
                                 {data.me && data.me.username}
                                 <div className="user-options">
-                                    <div><Link to="/products/create">Admin</Link></div>
+                                    <div><Link to="/checkout/orderlist">Đơn Hàng</Link></div>
                                     <div><Link to="/products/productlist">Sản Phẩm</Link></div>
                                     <div onClick={() => {
                                         onClick().then(() => {

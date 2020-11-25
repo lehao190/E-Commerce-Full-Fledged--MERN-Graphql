@@ -12,9 +12,9 @@ function ProductList(props) {
         skip: !user || !user.me.isAdmin
     });
     
-    if(user && !user.me.isAdmin) return <div>Not admin</div>
+    if(user && !user.me.isAdmin) return <div>Không Phải Admin</div>
     
-    if(!user) return <div>No User Found</div>
+    if(!user) return <div>Người Dùng Không Tồn Tại</div>
 
     return (
         <div id="product-list-container">

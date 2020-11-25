@@ -13,8 +13,10 @@ function CartProducts(
     
     const [itemcount, setItemCount] = useState(cartItem && cartItem.countInStock);
     
+    // Fetch cart's state
     const cartContext = useContext(cartItemsContext);
 
+    // Delete Item from cart
     const onClick = () => {
         cartContext.cartItemsDispatch({
             type: REMOVE_ITEM,
@@ -67,6 +69,7 @@ function CartProducts(
                         <input type="number" min="0" value={itemcount} onChange={ e => {
                             setItemCount(e.target.value);
                     
+                            // Add item to cart
                             cartContext.cartItemsDispatch({
                                 type: ADD_ITEM,
                                 payload: {

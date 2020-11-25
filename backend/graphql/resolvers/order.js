@@ -8,12 +8,23 @@ module.exports = {
     // Order Queries
     Query: {
         // Find all orders
-        async orders() {
+        async orders(_, __, { req }) {
             console.log("Orders Query get Called !!!");
 
-            const orders = await Order.find();
+            // Check for token
+            const user = await checkAuth(req, tokenValidator);
+
+            if(user.isAdmin) {
+                const orders = await Order.find().sort("-createdAt");
             
-            return orders;
+                return orders;
+            }
+
+            const userOrders = await Order.find({
+                user: user._id
+            }).sort("-createdAt");
+            
+            return userOrders;
         },
 
         // Find Order by id
@@ -121,6 +132,32 @@ module.exports = {
             return {
                 id: newOrder._id,
                 ...newOrder._doc
+            }
+        },
+
+        // Delete User's Order
+        async deleteOrder(_, { id }, { req }) {
+            console.log("Delete Order Mutation gets called !!!");
+            
+            // Check for token
+            const user = await checkAuth(req, tokenValidator);
+
+            // Check if user is Admin
+            if(!user) {
+                throw new UserInputError("Errors when creating order", {
+                    errors: {
+                        isUser: "Người dùng không tồn tại"
+                    }
+                })
+            }
+
+            // Find and delete User's Order
+            await Order.deleteOne({
+                _id: id
+            });
+
+            return {
+                message: "Delete Order Successfully YaHOOO !!!"
             }
         }
     }

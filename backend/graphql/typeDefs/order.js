@@ -47,7 +47,9 @@ module.exports = gql`
             country: String!
             paymentMethod: String!
             totalPrice: Float!
-        ): Order! 
+        ): Order!
+
+        deleteOrder(id: ID!): Message!
     }
 
     extend type Query {

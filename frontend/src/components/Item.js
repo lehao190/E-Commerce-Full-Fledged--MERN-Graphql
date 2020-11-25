@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
-import { useMutation} from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { PRODUCT_DELETE } from "../graphql/Mutations/productMutations";
 import { PRODUCTS } from '../graphql/Queries/productQueries';
+import { ORDER_DELETE } from "../graphql/Mutations/orderMutations";
+import { ORDERS } from '../graphql/Queries/orderQueries';
 
-function Item({ product: { id, image, name, price, brand, category }, history }) {
+function Item({ product, history, order }) {
+    // Delete Product Mutation
     const [deleteProduct] = useMutation(PRODUCT_DELETE);
+
+    // Delete Order Mutation
+    const [deleteOrder] = useMutation(ORDER_DELETE);
 
     const [errors, setErrors] = useState("");
 
-    const onClick = async () => {
+    // Delete Product
+    const onDeleteProduct = async () => {
         try {
             await deleteProduct({ 
                 variables: { 
-                    id,
-                    filename: image
+                    id: product.id,
+                    filename: product.image
                 },
                 update: (cache) => {
                     const existingProducts = cache.readQuery({
@@ -28,7 +35,7 @@ function Item({ product: { id, image, name, price, brand, category }, history })
                     cache.writeQuery({
                         query: PRODUCTS,
                         data: {
-                            products: existingProducts.products.filter((product) => product.id !== id)
+                            products: existingProducts.products.filter((item) => item.id !== product.id)
                         }
                     });
                     
@@ -41,43 +48,120 @@ function Item({ product: { id, image, name, price, brand, category }, history })
         }
     };
 
+    // Delete Order
+    const onDeleteOrder = async () => {
+        try {
+            await deleteOrder({
+                variables: {
+                    id: order.id
+                },
+                update: (cache) => {
+                    const existingOrders = cache.readQuery({
+                        query: ORDERS
+                    });
+
+                    cache.evict({
+                        fieldName: "notifications",
+                        broadcast: false
+                    });
+
+                    cache.writeQuery({
+                        query: ORDERS,
+                        data: {
+                            orders: existingOrders.orders.filter((item) => item.id !== order.id)
+                        }
+                    });
+                    
+                    setErrors("");
+                },
+            });
+        } catch (error) {
+            console.log(error);
+            setErrors(error.graphQLErrors[0].extensions.errors);
+
+            return null;
+        }
+    }
+
     return (
         <tr>
-            
-
             <td>
                 {errors && errors.isAdmin}
-                <h1>{id}</h1>
+                <h1>{product && product.id}</h1>
+                <h1>{order && order.id}</h1>
             </td>
 
             <td>
-                <h1>{name}</h1>
+                <h1>{ product && product.name }</h1>
+                <h1>{ order && order.user.username }</h1>
             </td>
 
             <td>
-                <h1>$ {price}</h1>
+                <h1>{product && "$ " + product.price }</h1>
+                <h1>{ order && "$ " + order.totalPrice }</h1>
             </td>
 
             <td>
-                <h1>{category}</h1>
+                <h1>{ product && product.category }</h1>
+                
+                <h1 style={{
+                    color: "red"
+                }}>
+                    { order && !order.isPaid && "Chưa Trả" }
+                </h1>
+
+                <h1 style={{
+                    color: "#22bb33"
+                }}>{ order && order.isPaid && "Đã Trả" }</h1>
             </td>
 
             <td>
-                <h1>{brand}</h1>
+                <h1>{ product && product.brand }</h1>
+
+                <h1 style={{
+                    color: "red"
+                }}>
+                    { order && !order.isDelivered && "Chưa Giao" }
+                </h1>
+                
+                <h1 style={{
+                    color: "#22bb33"
+                }}>
+                    { order && order.isDelivered && "Đã Giao" }
+                </h1>
             </td>
 
-            <td>
-                <span onClick={
-                    () => {
-                        history.push({
-                            pathname: `/products/edit/${id}`
-                        });
-                    }
-                } className="edit">
-                    <i className="far fa-edit"></i>
-                </span>
-                <span onClick={onClick} className="delete"><i className="fas fa-trash"></i></span>
-            </td>
+            {
+            product &&
+                <td>
+                    <span onClick={
+                        () => {
+                            history.push({
+                                pathname: `/products/edit/${product.id}`
+                            });
+                        }
+                    } className="edit">
+                        <i className="far fa-edit"></i>
+                    </span>
+                    <span onClick={onDeleteProduct} className="delete"><i className="fas fa-trash"></i></span>
+                </td>
+            }
+
+            {
+            order &&
+                <td>
+                    <span onClick={
+                        () => {
+                            history.push({
+                                pathname: `/checkout/${order.id}`
+                            });
+                        }
+                    } className="edit">
+                        <i className="far fa-edit"></i>
+                    </span>
+                    <span onClick={onDeleteOrder} className="delete"><i className="fas fa-trash"></i></span>
+                </td>
+            }
         </tr>
     )
 }

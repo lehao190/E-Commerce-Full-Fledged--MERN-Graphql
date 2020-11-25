@@ -2,13 +2,13 @@ import { gql } from "@apollo/client";
 
 export const ORDER_CREATE = gql`
     mutation Order(
-            $orderItems: [InputOrderItems],
-            $address: String!,
-            $city: String!,
-            $postalCode: String!,
-            $country: String!,
-            $paymentMethod: String!,
-            $totalPrice: Float!
+                $orderItems: [InputOrderItems],
+                $address: String!,
+                $city: String!,
+                $postalCode: String!,
+                $country: String!,
+                $paymentMethod: String!,
+                $totalPrice: Float!
             )
             {
                 createOrder(
@@ -52,6 +52,20 @@ export const ORDER_CREATE = gql`
                         email
                         isAdmin
                     }
+                }
+            }
+`;
+
+export const ORDER_DELETE = gql`
+    mutation Order(
+                $id: ID!
+            )
+            {
+                deleteOrder(
+                    id: $id
+                )
+                {
+                    message
                 }
             }
 `;

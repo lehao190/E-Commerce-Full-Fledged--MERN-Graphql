@@ -1,12 +1,18 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CartProducts from '../components/CartProducts';
 import { cartItemsContext } from '../context/cartItemsContext';
 import Cookies from "js-cookie";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ORDER_CREATE } from '../graphql/Mutations/orderMutations';
+import { ORDERS } from '../graphql/Queries/orderQueries';
 
 function PlaceOrder(props) {
     const isLoggedIn = Cookies.getJSON("isLoggedIn");
+
+    const [errors, setErrors] = useState("");
+
+    // Fetch Orders
+    useQuery(ORDERS);
 
     // Check if user Logged In
     useEffect(() => {
@@ -28,6 +34,7 @@ function PlaceOrder(props) {
         e.preventDefault();
 
         try {
+            // Create User's Order
             await orderCreate({
                 variables: {
                     orderItems: cartContext.cartItems.map(cartItem => {
@@ -45,17 +52,41 @@ function PlaceOrder(props) {
                         return Number(b.price) * Number(b.countInStock) + a; 
                     }, 0)
                 },
-                update: (_, { data: { createOrder } }) => {
+                update: async (cache, { data: { createOrder } }) => {
+                    const existingOrders = await cache.readQuery({
+                        query: ORDERS
+                    });
+
+                    cache.evict({
+                        fieldName: "notifications",
+                        broadcast: false
+                    });
+
+                    const newOrder = createOrder;
+
+                    cache.writeQuery({
+                        query: ORDERS,
+                        data: {
+                            orders: [newOrder, ...existingOrders.orders]
+                        },
+                    });
+
+                    setErrors("");
+
                     props.history.push({
                         pathname: `/checkout/${createOrder.id}`
                     });
                 }
             });
         } catch (error) {
-            console.log(error.graphQLErrors[0].extensions);
+            setErrors(error.graphQLErrors[0].extensions);
             return null;
         }
-    }; 
+    };
+
+    if(errors) {
+        console.log(errors.graphQLErrors[0].extensions);
+    }
 
     if(cartContext.cartItems.length === 0) {
         return <div style={{
