@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Products from '../components/Products';
 import { useQuery } from "@apollo/client";
 import { PRODUCTS } from "../graphql/Queries/productQueries";
 
 function Home() {
+    // Fetch Products
     const { loading, error, data } = useQuery(PRODUCTS);
+
+    const [] = useState(data);
+
+    useEffect(() => {
+
+    }, []);
 
     return (
         <div id="home-container">

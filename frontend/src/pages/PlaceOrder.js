@@ -79,14 +79,11 @@ function PlaceOrder(props) {
                 }
             });
         } catch (error) {
-            setErrors(error.graphQLErrors[0].extensions);
+            setErrors(error.graphQLErrors[0].extensions.errors);
+        
             return null;
         }
     };
-
-    if(errors) {
-        console.log(errors.graphQLErrors[0].extensions);
-    }
 
     if(cartContext.cartItems.length === 0) {
         return <div style={{
@@ -117,6 +114,17 @@ function PlaceOrder(props) {
                     <div className="cart-title">
                         <h1>GIỎ HÀNG</h1>
                     </div>
+
+                    {
+                        errors &&
+                            <div style={{
+                                marginTop: "20px",
+                                fontSize: "1.2rem"
+                            }}
+                            className="checkout-state warning">
+                                { errors.quantity }
+                            </div>
+                    }
     
                     {   
                         cartContext.cartItems &&

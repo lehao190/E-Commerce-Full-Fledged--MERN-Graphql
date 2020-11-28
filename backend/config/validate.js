@@ -87,3 +87,16 @@ module.exports.validCreateProduct = (description, name, category, brand, price, 
         valid: Object.keys(errors).length < 1
     };
 }
+
+module.exports.validCountInStock = (countInStock, quantity) => {
+    const errors = {};
+
+    if(countInStock - quantity < 0) {
+        errors.quantity = "Số lượng sản phẩm lớn hơn số lượng tồn kho !!!";
+    }
+
+    return {
+        errors,
+        valid: Object.keys(errors).length < 1
+    };
+}

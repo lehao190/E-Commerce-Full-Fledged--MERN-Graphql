@@ -44,71 +44,6 @@ function ProductDetails(props) {
                 price: data.product.price,
             }
         });
-
-
-        // const cartItems = Cookies.getJSON("cartItems");
-
-        // cartContext.cartItemsDispatch({
-        //     type: ADD_ITEM,
-        //     payload: {
-        //         brand: data.product.brand,
-        //         category: data.product.category,
-        //         countInStock: count,
-        //         description: data.product.description,
-        //         id: data.product.id,
-        //         image: data.product.image,
-        //         name: data.product.name,
-        //         price: data.product.price,
-        //     }
-        // });
-        
-        // if(cartItems) {
-        //     const existingItems = cartItems.filter(cartItem => {
-        //         return cartItem.id !== data.product.id
-        //     });
-
-        //     Cookies.set("cartItems", [
-        //         ...existingItems,
-        //         {
-        //             brand: data.product.brand,
-        //             category: data.product.category,
-        //             countInStock: count,
-        //             description: data.product.description,
-        //             id: data.product.id,
-        //             image: data.product.image,
-        //             name: data.product.name,
-        //             price: data.product.price,
-        //         }
-        //     ]);
-        // }
-        // else {
-        //     Cookies.set("cartItems", [
-        //         {
-        //             brand: data.product.brand,
-        //             category: data.product.category,
-        //             countInStock: count,
-        //             description: data.product.description,
-        //             id: data.product.id,
-        //             image: data.product.image,
-        //             name: data.product.name,
-        //             price: data.product.price,
-        //         }
-        //     ]);
-
-        //     // cartContext.cartItemsDispatch({
-        //     //     type: ADD_ITEM,
-        //     //     payload: {
-        //     //         brand: data.product.brand,
-        //     //         category: data.product.category,
-        //     //         countInStock: count,
-        //     //         description: data.product.description,
-        //     //         id: data.product.id,
-        //     //         image: data.product.image,
-        //     //         name: data.product.name,
-        //     //         price: data.product.price,
-        //     //     }
-        //     // });
-        // }
     };
 
     if(loading) return <div>Đang lấy dữ liệu...</div>
@@ -194,15 +129,28 @@ function ProductDetails(props) {
     
                                 <tr>
                                     <td>
-                                        <button>
-                                            <Link onClick={onClick} to="/cart" style={{
-                                                color: "white",
-                                                width: "100%",
-                                                display: "block"
-                                                }}>
-                                                THÊM VÀO GIỎ
-                                            </Link>
-                                        </button>
+                                        {
+                                            countInStock > 0 &&
+                                                <button>
+                                                    <Link onClick={onClick} to="/cart" style={{
+                                                        color: "white",
+                                                        width: "100%",
+                                                        display: "block"
+                                                        }}>
+                                                        THÊM VÀO GIỎ
+                                                    </Link>
+                                                </button>
+                                        }
+
+                                        {
+                                            countInStock <= 0 &&
+                                                <button style={{
+                                                            backgroundColor: "black",
+                                                            cursor: "not-allowed"
+                                                        }}>
+                                                    HẾT HÀNG
+                                                </button>
+                                        }
                                     </td>
                                 </tr>
                             </tbody>

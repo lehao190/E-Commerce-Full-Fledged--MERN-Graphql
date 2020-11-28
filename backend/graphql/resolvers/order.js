@@ -2,6 +2,7 @@ const Order = require("../../models/orderSchema");
 const Product = require("../../models/productSchema");
 const { tokenValidator } = require("../../config/jwtAuth");
 const { checkAuth } = require("../../config/authCheck");
+const { validCountInStock } = require("../../config/validate");
 const { UserInputError } = require("apollo-server-express");
 
 module.exports = {
@@ -78,6 +79,57 @@ module.exports = {
                 })
             }
 
+            // Check for Product Stock
+            const validOrder = await new Promise(async (resolve) => {
+                const order = await orderItems.map(async (orderItem) => {
+                    const product = await Product.findOne({
+                        _id: orderItem.product
+                    });
+
+                    let orderQuantity = product.countInStock - orderItem.quantity;
+
+                    return orderQuantity;
+                });
+
+                Promise.all(order).then((result) => {
+                    resolve(result);
+                });
+            });
+
+            // Check if Product Stock > 0
+            const isOrderValid = validOrder.filter(item => item < 0);
+
+            // Throw Error if Order's quantity - Product's CountInStock < 0
+            if(isOrderValid.length > 0) {
+                throw new UserInputError("Errors when creating order", {
+                    errors: {
+                        quantity: "Số lượng sản phẩm lớn hơn số lượng tồn kho !!!"
+                    }
+                });
+            }
+
+            //  Update Product's Stock if > 0
+            orderItems.forEach( async orderItem => {
+                // Find product
+                const product = await Product.findOne({
+                    _id: orderItem.product
+                });
+
+                // Update Product's Stock
+                await Product.findOneAndUpdate(
+                    {
+                        _id: orderItem.product
+                    },
+                    {
+                        countInStock: product.countInStock - orderItem.quantity
+                    },
+                    {
+                        new: true
+                    }
+                );
+            });
+
+            // Create Order
             const order = new Order({
                 orderItems: [
                     ...orderItems
@@ -96,27 +148,6 @@ module.exports = {
             });
 
             await order.save();
-
-            // Update Product's Stock
-            orderItems.forEach(async orderItem => {
-                // Find product
-                const product = await Product.findOne({
-                    _id: orderItem.product
-                });
-
-                // Update The Stock
-                await Product.findOneAndUpdate(
-                    {
-                        _id: orderItem.product
-                    },
-                    {
-                        countInStock: product.countInStock - orderItem.quantity
-                    },
-                    {
-                        new: true
-                    }
-                );
-            })
 
             // Return the Order
             const newOrder = await Order.findOne({
