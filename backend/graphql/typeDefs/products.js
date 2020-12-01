@@ -7,6 +7,15 @@ module.exports = gql `
         encoding: String!
     }
 
+    type UserComment {
+        userId: ID!,
+        username: String!,
+        userRating: Int!,
+        userComment: String!,
+        createdAt: String!,
+        updatedAt: String!
+    }
+
     type Product {
         id: ID!
         name: String! 
@@ -18,6 +27,9 @@ module.exports = gql `
         countInStock: Int!
         createdAt: String!
         updatedAt: String!
+        rating: Float!
+        numReviews: Int!
+        users: [UserComment]
     }
 
     type Message {
@@ -28,6 +40,7 @@ module.exports = gql `
         createProduct(file: Upload!, name: String!, description: String!, category: String!, brand: String!, price: Float!, countInStock: Int!): Product!
         deleteProduct(id: ID!, filename: String!): Message!
         updateProduct(id: ID!, file: Upload, name: String, description: String, category: String, brand: String, price: Float, countInStock: Int): Product!
+        createComment(userId: ID!, userRating: Int!, userComment: String!): Product!
     }
 
     extend type Query {

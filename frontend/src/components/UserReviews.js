@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 // Reviews From Users On Particular Product
 function UserReviews() {
@@ -9,7 +9,11 @@ function UserReviews() {
             </div>
 
             <div>
-                ★★★★★
+                <span>★</span>
+                <span>★</span>
+                <span>★</span>
+                <span>★</span>
+                <span>★</span>
             </div>
 
             <div>

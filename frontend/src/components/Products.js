@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from "react-router-dom";
+import { rate, average } from "average-rating";
 
 // All Products Upon Request
 function Products({ product: { id, name, image, price } }) {
-    const percent = 100;
+    // const rating = [];
+
+    // useEffect(() => {
+    //     for(let i = 1; i <= 5; i++) {
+    //         rating.push(i);
+    //     }
+
+    //     console.log(average(rating));
+    // }, [rating]);
+
+    const percent = 80;
     
     const style = {
         width: "50%",

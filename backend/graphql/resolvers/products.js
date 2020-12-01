@@ -262,6 +262,11 @@ module.exports = {
                 id: product._id,
                 ...product._doc
             }
+        },
+
+        // Create Product's Comment
+        async createComment(_, {  }, { req }) {
+            
         }
     }
 }

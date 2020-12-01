@@ -30,6 +30,7 @@ function ProductDetails(props) {
         color: "transparent",
     };
 
+    // Add item to cart
     const onClick = () => {
         cartContext.cartItemsDispatch({
             type: ADD_ITEM,
@@ -164,9 +165,7 @@ function ProductDetails(props) {
     
                 <div className="user-reviews">        
                     <UserReviews/>
-                    <UserReviews/>
-                    <UserReviews/>
-    
+
                     <div className="my-review">
                         <div>
                             <h1>ĐÁNH GIÁ CỦA BẠN</h1>
