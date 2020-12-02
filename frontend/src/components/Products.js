@@ -1,19 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from "react-router-dom";
-import { rate, average } from "average-rating";
 
 // All Products Upon Request
 function Products({ product: { id, name, image, price } }) {
-    // const rating = [];
-
-    // useEffect(() => {
-    //     for(let i = 1; i <= 5; i++) {
-    //         rating.push(i);
-    //     }
-
-    //     console.log(average(rating));
-    // }, [rating]);
-
     const percent = 80;
     
     const style = {
@@ -22,7 +11,7 @@ function Products({ product: { id, name, image, price } }) {
         letterSpacing: "2px",
         background: `linear-gradient(90deg, yellow ${percent}%, gray 0%)`,
         WebkitBackgroundClip: "text",
-        backgroundClip: "text",
+        // backgroundClip: "text",
         color: "transparent",
     };
 

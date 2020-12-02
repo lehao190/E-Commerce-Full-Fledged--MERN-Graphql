@@ -1,29 +1,47 @@
 import React from 'react';
 
 // Reviews From Users On Particular Product
-function UserReviews() {
+function UserReviews({ userComment }) {
+
+    // Count Star
+    const starRating = (rating) => {
+        let stars = [];
+
+        for(let i = 1; i <= 5; i++) {
+            if(rating >= i) {
+                stars.push(<span key={i}>★</span>);
+            }
+            else { 
+                stars.push(<span key={i}
+                    style={{
+                        color: "gray"
+                    }}
+                >★</span>);
+            }
+        }
+
+        return stars;
+    };
+
     return (
         <div className="user-review-container">
             <div>
-                Jane Doe
+                { userComment.username }
             </div>
 
             <div>
-                <span>★</span>
-                <span>★</span>
-                <span>★</span>
-                <span>★</span>
-                <span>★</span>
+                {
+                    starRating(userComment.userRating)
+                }
             </div>
 
             <div>
-                19/11/2020
+                {/* 19/11/2020 */}
+                { userComment.createdAt }
             </div>
 
             <div>
-                Nice headphone mate!!!
-                Nice headphone mate!!!
-                Nice headphone mate!!!
+               { userComment.userComment }
             </div>
         </div>
     )

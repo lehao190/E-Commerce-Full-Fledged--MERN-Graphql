@@ -2,9 +2,11 @@ const user = require("./user");
 const products = require("./products");
 const order = require("./order");
 const User = require("../../models/userSchema");
+const Product = require("../../models/productSchema");
 const Order = require("../../models/orderSchema");
 
 module.exports = {
+    // Order Resolver
     Order: {
         // Resolve Order Objects
         async orderItems(order) {
@@ -28,6 +30,14 @@ module.exports = {
             });
 
             return user;
+        }
+    },
+
+    // Product Resolver
+    Product: {
+        // Resolve User's Comment
+        async users(product) {
+            return product.users;
         }
     },
 

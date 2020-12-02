@@ -35,6 +35,9 @@ module.exports = {
                 brand, 
                 price, 
                 countInStock,
+                rating,
+                users,
+                numReviews,
                 createdAt,
                 updatedAt
             } = await Product.findOne({
@@ -48,7 +51,10 @@ module.exports = {
                 image,
                 category, 
                 brand, 
-                price, 
+                price,
+                rating,
+                numReviews,
+                users,
                 countInStock,
                 createdAt,
                 updatedAt
@@ -265,8 +271,81 @@ module.exports = {
         },
 
         // Create Product's Comment
-        async createComment(_, {  }, { req }) {
+        async createComment(_, { productId, userId, username, userRating, userComment }, { req }) {
+            console.log("Create Product's User Comment Mutation get Called !!!");
             
+            // Check for token
+            const user = await checkAuth(req, tokenValidator);
+
+            // Check if user exists
+            if(!user) {
+                throw new UserInputError("Errors in creating product", {
+                    errors: {
+                        isUser: "Người dùng không tồn tại !!!"
+                    }
+                })
+            }
+
+            // Find Product
+            const product = await Product.findOne({
+                _id: productId
+            });
+
+            product.users.push({
+                userId,
+                username,
+                userRating,
+                userComment,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString() 
+            });
+
+            await product.save();
+
+            const allRatings = product.users.reduce((a, b) => {
+                return a + b.userRating;
+            }, 0);
+
+            console.log("Nice Rating: ", allRatings);
+            console.log("Average: ", allRatings/product.users.length);
+
+            product.numReviews += 1;
+
+            product.rating = allRatings/product.users.length;
+
+            await product.save();
+
+            const {
+                id, 
+                name, 
+                description, 
+                image, 
+                category, 
+                brand, 
+                price, 
+                countInStock,
+                rating,
+                users,
+                numReviews,
+                createdAt,
+                updatedAt
+            } = product;
+
+            return {
+                id,
+                name, 
+                description,
+                image,
+                category, 
+                brand, 
+                price,
+                rating,
+                numReviews,
+                users,
+                countInStock,
+                createdAt,
+                updatedAt
+            }
         }
     }
 }

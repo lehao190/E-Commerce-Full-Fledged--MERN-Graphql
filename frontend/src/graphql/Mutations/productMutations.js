@@ -33,3 +33,30 @@ export const PRODUCT_DELETE = gql`
         }
     }
 `;
+
+export const CREATE_PRODUCT_COMMENT = gql`
+    mutation Product($productId: ID!,$userId: ID!, $username: String!, $userRating: Int!, $userComment: String!){
+        createComment(productId: $productId, userId: $userId, username: $username,userRating: $userRating, userComment: $userComment) {
+            id 
+            name 
+            description 
+            image 
+            category 
+            brand 
+            price 
+            countInStock
+            rating
+            numReviews
+            users {
+                _id
+                userId
+                username
+                userRating
+                userComment
+                createdAt
+            }
+            createdAt
+            updatedAt
+        }
+    }
+`;

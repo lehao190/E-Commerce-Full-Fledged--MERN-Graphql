@@ -24,6 +24,16 @@ export const PRODUCT = gql`
             brand 
             price 
             countInStock
+            rating
+            numReviews
+            users {
+                _id
+                userId
+                username
+                userRating
+                userComment
+                createdAt
+            }
             createdAt
             updatedAt
         }

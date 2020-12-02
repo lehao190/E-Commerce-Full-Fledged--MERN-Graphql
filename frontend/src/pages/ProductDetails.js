@@ -1,32 +1,50 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserReviews from '../components/UserReviews';
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { PRODUCT } from "../graphql/Queries/productQueries";
+import { ME } from "../graphql/Queries/userQueries";
 import { cartItemsContext } from '../context/cartItemsContext';
 import { ADD_ITEM } from '../actions/cartItemsActions';
+import { CREATE_PRODUCT_COMMENT } from "../graphql/Mutations/productMutations";
 
 function ProductDetails(props) {
     // Cart Items Context
     const cartContext = useContext(cartItemsContext);
 
+    const [errors, setErrors] = useState("");
+    // Quantity of the item
     const [count, setCount] = useState(0);
 
+    // Rating of user
+    const [rating, setRating] = useState(5);
+
+    // Comment of user
+    const [comment, setComment] = useState("");
+
+    // Fetch Product's data
     const { loading, error, data } = useQuery(PRODUCT, {
         variables: {
             id: props.match.params.productId
         }
     });
 
-    const percent = 50;
+    // Fetch for user 
+    const { data: user } = useQuery(ME, {
+        fetchPolicy: "cache-and-network"
+    });
+
+    const [createComment] = useMutation(CREATE_PRODUCT_COMMENT);
+
+    const percent = data && (data.product.rating/5) * 100;
     
     const style = {
         width: "50%",
         fontSize: "1.4rem",
         letterSpacing: "2px",
         background: `linear-gradient(90deg, yellow ${percent}%, gray 0%)`,
+        // backgroundClip: "text",
         WebkitBackgroundClip: "text",
-        backgroundClip: "text",
         color: "transparent",
     };
 
@@ -47,6 +65,31 @@ function ProductDetails(props) {
         });
     };
 
+    // Add User Commet
+    const onSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            if(user)
+                await createComment({ 
+                    variables: { 
+                        productId: props.match.params.productId, 
+                        userId: user.me.id,
+                        username: user.me.username,
+                        userRating: Number(rating), 
+                        userComment: comment
+                    },
+                    update: () => {
+                        setErrors(""); 
+                    },
+                });
+        } catch (error) {
+            setErrors(error.graphQLErrors[0].extensions.errors);
+            
+            return null;
+        }
+    };
+
     if(loading) return <div>Đang lấy dữ liệu...</div>
 
     if(error) return <div>Đã xảy ra lỗi trong quá trình lấy dữ liệu !!!</div>
@@ -58,7 +101,9 @@ function ProductDetails(props) {
                 description, 
                 image, 
                 price, 
-                countInStock
+                countInStock,
+                numReviews,
+                users
             }
         } = data;
 
@@ -91,7 +136,7 @@ function ProductDetails(props) {
                                     ★★★★★
                                 </div>
                                 <div className="product-reviews">
-                                    2 đánh giá
+                                    { numReviews } đánh giá
                                 </div>
                             </div>
                         </div>
@@ -163,41 +208,70 @@ function ProductDetails(props) {
                     <h1>ĐÁNH GIÁ CỦA NGƯỜI DÙNG</h1>
                 </div>
     
-                <div className="user-reviews">        
-                    <UserReviews/>
+                <div className="user-reviews">  
+                    {
+                        users.map(userComment => {
+                            return <UserReviews key={userComment._id} userComment={userComment} />
+                        })
+                    }
 
                     <div className="my-review">
                         <div>
                             <h1>ĐÁNH GIÁ CỦA BẠN</h1>
                         </div>
     
-                       <form action="/">
-                            <div>
-                                <h1>Chất lượng:</h1>
-    
+                       {
+                           user &&
+                            <form onSubmit={onSubmit}>
                                 <div>
-                                    <select>
-                                        <option>Xuất Sắc - 5 sao</option>
-                                        <option>Tuyệt Vời - 4 sao</option>
-                                        <option>Tốt - 3 sao</option>
-                                        <option>Bình Thường - 2 sao</option>
-                                        <option>Kém - 1 sao</option>
-                                    </select>
+                                    <h1>Chất lượng:</h1>
+        
+                                    <div>
+                                        <select name="ratings" onChange={ e => setRating(e.target.value) }>
+                                            <option value={5}>Xuất Sắc - 5 sao</option>
+                                            <option value={4}>Tuyệt Vời - 4 sao</option>
+                                            <option value={3}>Tốt - 3 sao</option>
+                                            <option value={2}>Bình Thường - 2 sao</option>
+                                            <option value={1}>Kém - 1 sao</option>
+                                        </select>
+                                    </div>
+        
+                                    <h1>
+                                        Bình Luận:
+                                    </h1>
+        
+                                    <div>
+                                        <textarea onChange={ e => setComment(e.target.value) } />
+                                    </div>
                                 </div>
-    
-                                <h1>
-                                    Bình Luận:
-                                </h1>
-    
+        
                                 <div>
-                                    <textarea/>
+                                    <button>ĐĂNG</button>
                                 </div>
+
+                                {
+                                    errors &&
+                                        <div style={{
+                                            marginTop: "20px",
+                                            fontSize: "1.2rem"
+                                            }}
+                                            className="checkout-state warning">
+                                                Xảy ra lỗi khi đăng !!!
+                                        </div>
+                                }
+                            </form>
+                       }
+
+                       {
+                           !user &&
+                            <div style={{
+                                marginTop: "20px",
+                                fontSize: "1.2rem"
+                                }}
+                                className="checkout-state warning">
+                                    Bạn Chưa Đăng Nhập !!!
                             </div>
-    
-                            <div>
-                                <button>ĐĂNG</button>
-                            </div>
-                       </form>
+                       }
                     </div>
                 </div>
             </div>
