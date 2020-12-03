@@ -36,14 +36,13 @@ function ProductDetails(props) {
 
     const [createComment] = useMutation(CREATE_PRODUCT_COMMENT);
 
-    const percent = data && (data.product.rating/5) * 100;
+    const percent = data && (data.product.rating / 5) * 100;
     
     const style = {
         width: "50%",
         fontSize: "1.4rem",
         letterSpacing: "2px",
         background: `linear-gradient(90deg, yellow ${percent}%, gray 0%)`,
-        // backgroundClip: "text",
         WebkitBackgroundClip: "text",
         color: "transparent",
     };
@@ -85,7 +84,7 @@ function ProductDetails(props) {
                 });
         } catch (error) {
             setErrors(error.graphQLErrors[0].extensions.errors);
-            
+
             return null;
         }
     };
@@ -208,7 +207,18 @@ function ProductDetails(props) {
                     <h1>ĐÁNH GIÁ CỦA NGƯỜI DÙNG</h1>
                 </div>
     
-                <div className="user-reviews">  
+                <div className="user-reviews">
+                    {
+                        users.length === 0 && 
+                            <div style={{
+                                marginTop: "20px",
+                                fontSize: "1.2rem"
+                                }}
+                                className="checkout-state warning">
+                                    Không Có Nhận Xét !!! 
+                            </div>
+                    }
+
                     {
                         users.map(userComment => {
                             return <UserReviews key={userComment._id} userComment={userComment} />
@@ -219,6 +229,18 @@ function ProductDetails(props) {
                         <div>
                             <h1>ĐÁNH GIÁ CỦA BẠN</h1>
                         </div>
+
+                        {
+                            errors &&
+                                <div style={{
+                                    marginTop: "20px",
+                                    marginBottom: "20px",
+                                    fontSize: "1.2rem"
+                                    }}
+                                    className="checkout-state warning">
+                                        { errors.isCommentValid }
+                                </div>
+                        }
     
                        {
                            user &&
@@ -248,17 +270,6 @@ function ProductDetails(props) {
                                 <div>
                                     <button>ĐĂNG</button>
                                 </div>
-
-                                {
-                                    errors &&
-                                        <div style={{
-                                            marginTop: "20px",
-                                            fontSize: "1.2rem"
-                                            }}
-                                            className="checkout-state warning">
-                                                Xảy ra lỗi khi đăng !!!
-                                        </div>
-                                }
                             </form>
                        }
 

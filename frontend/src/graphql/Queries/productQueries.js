@@ -9,6 +9,8 @@ export const PRODUCTS = gql`
             price
             category
             brand
+            rating
+            numReviews
         }
     }
 `;

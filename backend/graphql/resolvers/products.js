@@ -283,13 +283,26 @@ module.exports = {
                     errors: {
                         isUser: "Người dùng không tồn tại !!!"
                     }
-                })
+                });
             }
 
             // Find Product
             const product = await Product.findOne({
                 _id: productId
             });
+
+            const existingUser = product.users.filter(existingUser => {
+                return existingUser.userId.toString() === user.id;
+            });
+
+            // User has reviewed 
+            if(existingUser.length > 0) {
+                throw new UserInputError("Errors in creating product", {
+                    errors: {
+                        isCommentValid: "Bạn Đã Có Nhận Xét !!!"
+                    }
+                });
+            }
 
             product.users.push({
                 userId,
@@ -302,15 +315,15 @@ module.exports = {
 
             await product.save();
 
+            // get all users's Ratings
             const allRatings = product.users.reduce((a, b) => {
                 return a + b.userRating;
             }, 0);
 
-            console.log("Nice Rating: ", allRatings);
-            console.log("Average: ", allRatings/product.users.length);
-
+            // User's Review
             product.numReviews += 1;
 
+            // Average Rating Number
             product.rating = allRatings/product.users.length;
 
             await product.save();

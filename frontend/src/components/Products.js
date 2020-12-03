@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 // All Products Upon Request
-function Products({ product: { id, name, image, price } }) {
-    const percent = 80;
+function Products({ product: { id, name, image, price, rating, numReviews } }) {
+    const percent = (rating / 5) * 100;
     
     const style = {
         width: "50%",
@@ -11,7 +11,6 @@ function Products({ product: { id, name, image, price } }) {
         letterSpacing: "2px",
         background: `linear-gradient(90deg, yellow ${percent}%, gray 0%)`,
         WebkitBackgroundClip: "text",
-        // backgroundClip: "text",
         color: "transparent",
     };
 
@@ -31,7 +30,7 @@ function Products({ product: { id, name, image, price } }) {
                     style={style}>
                         ★★★★★
                     </div>
-                    <div>2 Đánh Giá</div>
+                    <div>{ numReviews } Đánh Giá</div>
                 </div>
 
                 <div className="product-price">
