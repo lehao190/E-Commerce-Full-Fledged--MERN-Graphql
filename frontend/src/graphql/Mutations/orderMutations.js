@@ -69,3 +69,95 @@ export const ORDER_DELETE = gql`
                 }
             }
 `;
+
+export const ORDER_DELIVER = gql`
+    mutation Order(
+                $orderId: ID!
+            )
+            {
+                deliverOrder(
+                    orderId: $orderId
+                )
+                {
+                    id
+                    totalPrice
+                    isPaid
+                    paidAt
+                    isDelivered
+                    deliveredAt
+                    shipping {
+                        address
+                        city
+                        postalCode
+                        country
+                    }
+                    payment {
+                        paymentMethod
+                    }
+                    orderItems {
+                        product {
+                            id
+                            name
+                            image
+                            category
+                            brand
+                        }
+                        quantity
+                    }
+                    user {
+                        id
+                        username
+                        email
+                        isAdmin
+                    }
+                }
+            }
+`;
+
+export const PAY_ORDER = gql`
+    mutation Order(
+                $orderId: ID!
+                $userOrderId: ID!
+                $payerId: ID!
+            )
+            {
+                payOrder(
+                    orderId: $orderId
+                    userOrderId: $userOrderId
+                    payerId: $payerId
+                )
+                {
+                    id
+                    totalPrice
+                    isPaid
+                    paidAt
+                    isDelivered
+                    deliveredAt
+                    shipping {
+                        address
+                        city
+                        postalCode
+                        country
+                    }
+                    payment {
+                        paymentMethod
+                    }
+                    orderItems {
+                        product {
+                            id
+                            name
+                            image
+                            category
+                            brand
+                        }
+                        quantity
+                    }
+                    user {
+                        id
+                        username
+                        email
+                        isAdmin
+                    }
+                }
+            }
+`;
