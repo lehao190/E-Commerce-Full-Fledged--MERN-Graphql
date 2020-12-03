@@ -67,6 +67,7 @@ function CreateProduct(props) {
             });
         } catch (error) {
             setErrors(error.graphQLErrors[0].extensions.errors);
+            
             return null;
         }
     }

@@ -190,6 +190,74 @@ module.exports = {
             return {
                 message: "Delete Order Successfully YaHOOO !!!"
             }
+        },
+
+        // Deliver Order
+        async deliverOrder(_, { orderId }, { req }) {
+            console.log("Deliver Order Mutation get Called !!!");
+            
+            // Check for token
+            const user = await checkAuth(req, tokenValidator);
+
+            // Check if user is Admin
+            if(!user.isAdmin) {
+                throw new UserInputError("Errors when creating order", {
+                    errors: {
+                        isAdmin: "Không phải Admin"
+                    }
+                })
+            }
+
+            const order = await Order.findOne({
+                _id: orderId
+            });
+
+            order.isDelivered = true;
+
+            order.deliveredAt = new Date().toISOString();
+
+            await order.save();
+
+            return {
+                id: order._id,
+                ...order._doc
+            }
+        },
+
+        // Pay Order
+        async payOrder(_, { orderId, userOrderId, payerId }, { req }) {
+            console.log("Pay Order Mutation get Called !!!");
+            
+            // Check for token
+            const user = await checkAuth(req, tokenValidator);
+
+            // Check if user is Admin
+            if(user.isAdmin) {
+                throw new UserInputError("Errors when creating order", {
+                    errors: {
+                        isAdmin: "Admin Không Thể Trả Tiền"
+                    }
+                })
+            }
+
+            const order = await Order.findOne({
+                _id: orderId
+            });
+
+            order.isPaid = true;
+
+            order.paidAt = new Date().toISOString();
+
+            order.payment.orderId = userOrderId;
+
+            order.payment.payerId = payerId;
+
+            await order.save();
+
+            return {
+                id: order._id,
+                ...order._doc
+            }
         }
     }
 }

@@ -1,12 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import CartProducts from '../components/CartProducts';
 import Paypal from "../components/paypal";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import Cookies from "js-cookie";
 import { ORDER } from '../graphql/Queries/orderQueries';
+import { ORDER_DELIVER } from '../graphql/Mutations/orderMutations';
+import { ME } from '../graphql/Queries/userQueries';
+import moment from "moment";
 
 function CheckOut(props) {
     const isLoggedIn = Cookies.getJSON("isLoggedIn");
+
+    // const [totalPrice, setTotalPrice] = useState(0);
+    let totalPrice = 0;
+
+    // Errors
+    const [errors, setErrors] = useState("");
 
     // Make Order Query
     const { loading, error, data } = useQuery(ORDER, {
@@ -15,6 +24,34 @@ function CheckOut(props) {
         }
     });
 
+    // Deliver Order Mutation
+    const [deliverOrder] = useMutation(ORDER_DELIVER);
+
+    // Fetch for user 
+    const { data: user } = useQuery(ME, {
+        fetchPolicy: "cache-and-network"
+    });
+
+    // Deliver Items
+    const onSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            await deliverOrder({
+                variables: {
+                    orderId: props.match.params.checkoutId
+                },
+                update: () => {
+                    setErrors("");
+                }
+            });
+        } catch (error) {
+            setErrors(error.graphQLErrors[0].extensions.errors);
+
+            return null;
+        }
+    };
+
     // Check if user Logged-In
     useEffect(() => {
         if(!isLoggedIn.state) props.history.push({
@@ -22,7 +59,11 @@ function CheckOut(props) {
         });
     }, [isLoggedIn.state, props.history]);
 
-    if(!data) {
+    if(loading) return <div>Đang tải...</div>
+
+    if(error || errors) return <div>Lỗi đã xảy ra...</div>
+
+    if(!data || !user) {
         return <div style={{
             fontWeight: "bold",
             fontSize: "1.5rem",
@@ -30,11 +71,7 @@ function CheckOut(props) {
         }}>Không có món hàng nào !!!!</div>
     }
 
-    if(loading) return <div>Đang tải...</div>
-
-    if(error) return <div>Errors xảy ra...</div>
-
-    if(data) {
+    if(data && user) {
         const { order } = data;
 
         return (
@@ -60,7 +97,7 @@ function CheckOut(props) {
                         {
                             order.isDelivered &&
                             <div className="checkout-state success">
-                                Đã giao hàng !
+                                Đã giao hàng vào lúc: {moment(order.deliveredAt, "x").format("DD / MMMM / YYYY")}
                             </div>
                         }
                     </div>
@@ -71,7 +108,7 @@ function CheckOut(props) {
                         {
                             order.isPaid &&
                             <div className="checkout-state success">
-                                Đã giao hàng vào: 19/11/2020
+                                Đã trả tiền vào: {moment(order.paidAt, "x").format("DD / MMMM / YYYY")}
                             </div>
                         }
 
@@ -97,7 +134,7 @@ function CheckOut(props) {
 
                 <div className="cart-checkout">
                     <div className="add-product">
-                        <form>
+                        <form onSubmit={onSubmit}>
                             <table>
                                 <thead>
                                     <tr>
@@ -125,7 +162,7 @@ function CheckOut(props) {
                                             <h1>
                                                 $ 
                                                 {
-                                                    order.orderItems.reduce((a ,b) => {
+                                                    totalPrice = order.orderItems.reduce((a ,b) => {
                                                         return Number(b.product.price) * Number(b.quantity) + a; 
                                                     }, 0)
                                                 }
@@ -135,11 +172,23 @@ function CheckOut(props) {
 
                                     <tr>
                                         <td>
-                                            <div style={{
-                                                width: "100%"
-                                            }}>
-                                                <Paypal/>
-                                            </div>
+                                            {
+                                                !user.me.isAdmin &&
+                                                    <div style={{
+                                                        width: "100%"
+                                                    }}>
+                                                        <Paypal 
+                                                            totalPrice={totalPrice}
+                                                            orderId={props.match.params.checkoutId}
+                                                        />
+                                                    </div>
+                                            }
+                                            {
+                                                user.me.isAdmin && !order.isDelivered &&
+                                                <button>
+                                                    ĐÃ GIAO HÀNG
+                                                </button>
+                                            }
                                         </td>
                                     </tr>
                                 </tbody>

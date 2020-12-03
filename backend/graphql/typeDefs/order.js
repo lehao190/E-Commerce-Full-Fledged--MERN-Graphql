@@ -50,6 +50,10 @@ module.exports = gql`
         ): Order!
 
         deleteOrder(id: ID!): Message!
+        
+        deliverOrder(orderId: ID!): Order!
+
+        payOrder(orderId: ID!, userOrderId: ID!, payerId: ID!):Order!
     }
 
     extend type Query {
