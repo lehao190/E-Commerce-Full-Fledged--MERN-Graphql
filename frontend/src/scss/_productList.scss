@@ -1,0 +1,32 @@
+#product-list-container {
+    width: 100%;
+    padding: 30px 40px;
+
+    & > :nth-child(1) {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+
+        & > :first-child {
+            
+            h1 {
+                font-size: 1.5rem;
+                color: $third;
+            }
+        }
+
+        & > :last-child {
+            background-color: $third;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            
+            div {
+                font-size: 1.0rem;
+            }
+        }
+    }
+
+    @include table-items;
+}

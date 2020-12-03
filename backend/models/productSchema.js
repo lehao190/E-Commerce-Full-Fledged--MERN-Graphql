@@ -11,14 +11,14 @@ const productSchema = new mongoose.Schema(
       countInStock: { type: Number, default: 0, required: true },
       rating: { type: Number, default: 0.0 },
       numReviews: { type: Number, default: 0 },
-      users: {
+      users: [{
           userId: mongoose.Schema.Types.ObjectId,
           username: String,
           userRating: Number,
           userComment: String,
-          createdAt: { type: Date, default: Date.now },
-          updatedAt: { type: Date, default: Date.now },
-      }
+          createdAt: Date,
+          updatedAt: Date
+      }]
     },
     { timestamps: true }
   );

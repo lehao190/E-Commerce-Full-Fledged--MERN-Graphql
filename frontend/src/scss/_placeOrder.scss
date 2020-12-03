@@ -1,0 +1,32 @@
+#placeorder-container {
+    width: 100%;
+    padding: 30px 40px;
+    display: flex;
+    flex-wrap: wrap;
+
+    .cart {
+
+        .shipping, .payment-method {
+            margin-bottom: 30px;
+            margin-right: 40px;
+            border-bottom: 1px solid $third;
+            
+            h1 {
+                font-size: 1.5rem;
+                color: $third;
+            }
+
+            div {
+                font-size: 1.1rem;
+                margin: 15px 0;
+            }
+        }
+    }
+
+    @include flex-cart;
+
+    .cart-checkout {
+
+        @include add-product;
+    }
+}

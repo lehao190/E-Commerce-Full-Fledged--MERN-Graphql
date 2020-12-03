@@ -2,28 +2,27 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 // All Products Upon Request
-function Products() {
-    const percent = 100;
-
+function Products({ product: { id, name, image, price, rating, numReviews } }) {
+    const percent = (rating / 5) * 100;
+    
     const style = {
         width: "50%",
         fontSize: "1.4rem",
         letterSpacing: "2px",
         background: `linear-gradient(90deg, yellow ${percent}%, gray 0%)`,
         WebkitBackgroundClip: "text",
-        backgroundClip: "text",
         color: "transparent",
     };
 
     return (
         <div className="product-card">
-            <Link to="/products/asd">
+            <Link to={`/products/${id}`}>
                 <div className="product-image">
-                    <img src="logo192.png"/>
+                    <img src={`http://localhost:4000/public/images/${image}`} alt="" />
                 </div>
                     
                 <div className="product-name">
-                    Awesome Product!!!
+                    {name}
                 </div>
 
                 <div className="product-ratings">
@@ -31,11 +30,11 @@ function Products() {
                     style={style}>
                         ★★★★★
                     </div>
-                    <div>2 Đánh Giá</div>
+                    <div>{ numReviews } Đánh Giá</div>
                 </div>
 
                 <div className="product-price">
-                    $80
+                    ${price}
                 </div>
             </Link>
         </div>

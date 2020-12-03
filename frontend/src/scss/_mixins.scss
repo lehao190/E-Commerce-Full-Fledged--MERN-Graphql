@@ -4,6 +4,18 @@
     }
 }
 
+@mixin tablet{
+    @media(max-width: $tablet){
+        @content;
+    }
+}
+
+@mixin tablet-mobile{
+    @media(max-width: 1200px) and (min-width: 900px){
+        @content;
+    }
+}
+
 @mixin ratings {
     .product-ratings {
         display: flex;
@@ -29,6 +41,195 @@
             // background: linear-gradient(90deg, yellow 50%, gray 0%);
             // background-clip: text;
             // color: transparent;
+        }
+    }
+}
+
+@mixin cart-products {
+    .cart-products {
+        padding: 30px 0;
+
+        .cart-product {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 0 50px;
+            border-bottom: 1px $third solid;
+
+            & > div {
+                margin: 10px;
+            }
+
+            .cart-product-image {
+                flex: 1 2 1%;
+            }
+
+            .cart-product-name {
+                flex: 3 3 20%;
+                
+                h1 {
+                    font-size: 1.0rem;
+                    color: rgb(143, 143, 143);
+                }
+            }
+
+            .cart-product-price {
+                flex: 1 1 5%;
+                
+                h1 {
+                    font-size: 1.5rem;
+                }
+            }
+
+            .cart-product-qty {
+                flex: 1 2 1%;
+
+                input {
+                    height: 10px;
+                }
+            }
+
+            .cart-product-delete {
+                flex: 1 1 10%;
+                margin-left: 50px;
+
+                i {
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                }
+            }
+        }
+    
+    }
+}
+
+@mixin add-product {
+    .add-product {
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 3px 5px 12px -4px rgba(0,0,0,0.75);
+
+            td, td {
+                font-size: 1.4rem;
+                border: 1px solid $third;
+                padding: 8px;
+                display: flex;
+                justify-content: space-around;
+
+                input {
+                    width: 30%;
+                }
+
+                button {
+                    display: block;
+                    border-color: unset;
+                    background: $third;
+                    padding: 10px;
+                    width: 100%;
+                    color: white;
+                    font-weight: bold;
+                    border-style: unset;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+@mixin flex-cart {
+    .cart {
+        flex: 80%;
+
+        .cart-title {
+            
+            h1 {
+                color: $third;
+                font-size: 1.5rem;
+            }
+        }
+
+        @include cart-products
+    }
+
+    .cart-checkout {
+        flex: 20%;
+
+        table {
+            width: 100%;
+            border: 1px solid $third;
+            border-collapse: collapse;
+            box-shadow: 3px 5px 9px -4px rgba(0, 0, 0, 0.75);
+
+            td {
+                border: 1px solid $third;
+
+                h1 {
+                    padding: 10px 8px;
+                }
+            }
+
+            button {
+                display: block;
+                border-color: unset;
+                background: $third;
+                padding: 10px;
+                width: 100%;
+                color: white;
+                font-weight: bold;
+                border-style: unset;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+@mixin table-items {
+    .table-dashboard {
+        width: 85%;
+        border-collapse: collapse;
+
+        thead {
+            color: $third;
+        }
+
+        thead,tbody {
+            width: 100%;
+        }
+
+        thead tr td, tbody tr td {
+            width: 10%;
+            font-size: 1.4rem;
+            padding: 8px;
+        }
+
+        tbody {
+            tr:nth-child(odd) {
+                background-color: rgb(233, 233, 233);
+            }
+
+            td:last-child {
+                border: unset;
+                width: 6%;
+
+                span {
+                    margin: 0 5px;
+                    padding: 10px;
+                    cursor: pointer;
+                }
+
+                .edit {
+                    background-color: $third;
+                    color: white;
+                }
+
+                .delete {
+                    color: white;
+                    background-color: red;
+                }
+            }
         }
     }
 }

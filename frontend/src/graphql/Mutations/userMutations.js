@@ -21,3 +21,11 @@ export const REGISTER = gql`
         }
     }
 `;
+
+export const LOGOUT = gql`
+    mutation UserLogout {
+        logOut {
+            message
+        }
+    }
+`;

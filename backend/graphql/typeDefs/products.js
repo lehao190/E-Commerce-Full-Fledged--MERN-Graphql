@@ -7,12 +7,47 @@ module.exports = gql `
         encoding: String!
     }
 
+    type UserComment {
+        _id: ID!,
+        userId: ID!,
+        username: String!,
+        userRating: Int!,
+        userComment: String!,
+        createdAt: String!,
+        updatedAt: String!
+    }
+
+    type Product {
+        id: ID!
+        name: String! 
+        description: String!
+        image: String!
+        category: String! 
+        brand: String! 
+        price: Float! 
+        countInStock: Int!
+        createdAt: String!
+        updatedAt: String!
+        rating: Float!
+        numReviews: Int!
+        users: [UserComment]
+    }
+
+    type Message {
+        message: String!
+    }
+
     extend type Mutation {
-        singleUpload(file: Upload!): File!
+        createProduct(file: Upload!, name: String!, description: String!, category: String!, brand: String!, price: Float!, countInStock: Int!): Product!
+        deleteProduct(id: ID!, filename: String!): Message!
+        updateProduct(id: ID!, file: Upload, name: String, description: String, category: String, brand: String, price: Float, countInStock: Int): Product!
+        createComment(productId: ID!, userId: ID!, username: String!, userRating: Int!, userComment: String!): Product!
     }
 
     extend type Query {
         uploads: [File]
+        products: [Product]
+        product(id: ID!): Product
     }
 
 `;

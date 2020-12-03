@@ -1,36 +1,49 @@
 const { validLogin, validRegister } = require("../../config/validate");
 const { tokenGenerator, tokenValidator } = require("../../config/jwtAuth");
 const bcrypt = require("bcryptjs");
-const { AuthenticationError, UserInputError, ApolloError } = require("apollo-server-express"); 
+const { UserInputError } = require("apollo-server-express"); 
 const User = require("../../models/userSchema");
+const { checkAuth } = require("../../config/authCheck");
 
 module.exports = {
     // Query Resolvers
     Query: {
+        // Query User's Info
         async me(_, __, { req }) {
             console.log("Query user get called !!!");
 
             // Find if user has JWT Token 
-            if(req.session.jwt) {
-                try {
-                    const decodedToken = tokenValidator(req.session.jwt);
+            const user = await checkAuth(req, tokenValidator);
 
-                    const user = await User.findOne({
-                        _id: decodedToken.id
-                    });
-                   
-                    return {
-                        id: user.id,
-                        username: user.username,
-                        email: user.email,
-                        isAdmin: user.isAdmin
-                    }
-                } catch (error) {
-                    throw error;
+            if(user) {
+                return {
+                    id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    isAdmin: user.isAdmin
                 }
             }
-        
-            throw new AuthenticationError("Token needed !!!");
+
+            // throw new AuthenticationError("Token needed !!!");
+
+            // if(req.session.jwt) {
+            //     try {
+            //         const decodedToken = tokenValidator(req.session.jwt);
+
+            //         const user = await User.findOne({
+            //             _id: decodedToken.id
+            //         });
+                   
+            //         return {
+            //             id: user.id,
+            //             username: user.username,
+            //             email: user.email,
+            //             isAdmin: user.isAdmin
+            //         }
+            //     } catch (error) {
+            //         throw error;
+            //     }
+            // }
         },
     },
 
@@ -90,10 +103,10 @@ module.exports = {
             }
 
             // Find user if exists
-            let user = await User.findOne({
+            const user = await User.findOne({
                 email
             });
-
+            
             if(!user) {
                 throw new UserInputError("Errors occured in login process", {
                     errors: {
@@ -157,7 +170,22 @@ module.exports = {
                 ...user._doc,
                 token: tokenGenerator(user._id, user.username, user.email, user.isAdmin, req)
             }
-        }
+        },
 
+        // Log user Out
+        async logOut (_, __, { req, res }) {
+            console.log("Log out mutation hit !!!");
+
+            req.session.destroy((err) => {
+                if(err) {
+                    return err;
+                }
+            });
+            res.clearCookie("jwt");
+
+            return {
+                message: "Log Out Successfully Mate !!!"
+            }
+        }
     }
 }

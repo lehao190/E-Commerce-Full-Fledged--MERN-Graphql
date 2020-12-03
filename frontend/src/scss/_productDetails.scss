@@ -71,9 +71,26 @@
 
             .product-ratings {
                 width: 38%;
+                display: flex;
+
+                .product-reviews {
+                    align-self: center;
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                    margin-left: 8px;
+                    margin-top: 5px;
+                }
 
                 @include mobile {
-                   width: 42%;
+                   width: 27% !important;
+                }
+
+                @include tablet {
+                   width: 44%;
+                }
+
+                @include tablet-mobile {
+                   width: 55%;
                 }
             }
         }
@@ -186,7 +203,8 @@
                 border-color: unset;
                 background: $third;
                 padding: 10px;
-                width: 25%;
+                width: 120px;
+                // width: 25%;
                 color: white;
                 font-weight: bold;
                 border-style: unset;
