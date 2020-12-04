@@ -60,14 +60,6 @@ module.exports = {
                 updatedAt
             }
         }
-
-        //    uploads() {
-        //        console.log('query uploads')
-        //        return [{
-        //            filename: "ahahha",
-        //            mimetype: "mime",
-        //        }]
-        //    }
     },
 
     // Product Mutation

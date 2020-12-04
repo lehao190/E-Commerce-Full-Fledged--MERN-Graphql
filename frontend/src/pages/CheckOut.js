@@ -11,7 +11,7 @@ import moment from "moment";
 function CheckOut(props) {
     const isLoggedIn = Cookies.getJSON("isLoggedIn");
 
-    // const [totalPrice, setTotalPrice] = useState(0);
+    // Total Price of All Items
     let totalPrice = 0;
 
     // Errors
@@ -173,7 +173,7 @@ function CheckOut(props) {
                                     <tr>
                                         <td>
                                             {
-                                                !user.me.isAdmin &&
+                                                !user.me.isAdmin && !order.isPaid &&
                                                     <div style={{
                                                         width: "100%"
                                                     }}>
@@ -183,6 +183,7 @@ function CheckOut(props) {
                                                         />
                                                     </div>
                                             }
+
                                             {
                                                 user.me.isAdmin && !order.isDelivered &&
                                                 <button>

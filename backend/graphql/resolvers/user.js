@@ -23,27 +23,6 @@ module.exports = {
                     isAdmin: user.isAdmin
                 }
             }
-
-            // throw new AuthenticationError("Token needed !!!");
-
-            // if(req.session.jwt) {
-            //     try {
-            //         const decodedToken = tokenValidator(req.session.jwt);
-
-            //         const user = await User.findOne({
-            //             _id: decodedToken.id
-            //         });
-                   
-            //         return {
-            //             id: user.id,
-            //             username: user.username,
-            //             email: user.email,
-            //             isAdmin: user.isAdmin
-            //         }
-            //     } catch (error) {
-            //         throw error;
-            //     }
-            // }
         },
     },
 
