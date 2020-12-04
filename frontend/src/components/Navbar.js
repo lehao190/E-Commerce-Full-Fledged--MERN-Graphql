@@ -55,7 +55,10 @@ function Navbar() {
                                 {data.me && data.me.username}
                                 <div className="user-options">
                                     <div><Link to="/checkout/orderlist">Đơn Hàng</Link></div>
-                                    <div><Link to="/products/productlist">Sản Phẩm</Link></div>
+                                    {
+                                        data.me.isAdmin &&
+                                            <div><Link to="/products/productlist">Sản Phẩm</Link></div>
+                                    }
                                     <div onClick={() => {
                                         onClick().then(() => {
                                             Cookies.set("isLoggedIn", { state: false });

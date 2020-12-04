@@ -1,5 +1,6 @@
 import React from 'react';
 import { starRating } from "../utils/starRating";
+import moment from "moment";
 
 // Reviews From Users On Particular Product
 function UserReviews({ userComment }) {
@@ -16,8 +17,7 @@ function UserReviews({ userComment }) {
             </div>
 
             <div>
-                {/* 19/11/2020 */}
-                { userComment.createdAt }
+                {moment(userComment.createdAt, "x").format("DD / MMMM / YYYY")}
             </div>
 
             <div>
