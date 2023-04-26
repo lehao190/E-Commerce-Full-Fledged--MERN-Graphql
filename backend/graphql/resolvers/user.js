@@ -59,6 +59,7 @@ module.exports = {
                 username,
                 email,
                 password: await bcrypt.hash(password, 10),
+                isAdmin: username === "admin" ? true : false
             });
             await user.save();
 
