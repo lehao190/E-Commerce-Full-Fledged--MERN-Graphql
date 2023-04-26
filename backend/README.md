@@ -1,3 +1,7 @@
+## env
+
+Create .env file from .env.example
+
 ## Available Scripts
 
 In the project directory, you can run:
