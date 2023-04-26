@@ -1,5 +1,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Prior step
+
+Create credentials.js file from credentials.example.js in src/ folder
+The Credentials(client id) is from Paypal
+
 ## Available Scripts
 
 In the project directory, you can run:

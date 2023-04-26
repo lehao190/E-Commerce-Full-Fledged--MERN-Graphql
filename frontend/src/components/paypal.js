@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { PayPalButton } from "react-paypal-button-v2";
 import { useMutation } from "@apollo/client";
 import { PAY_ORDER } from '../graphql/Mutations/orderMutations';
+import { credentials } from '../credentials';
 
 // Paypal Button
 function Paypal({ totalPrice, orderId }) {
@@ -39,7 +40,7 @@ function Paypal({ totalPrice, orderId }) {
             }}
 
             options={{
-                clientId: "AcQjLMncBXFdRwp3h8FVU-X8zDWtb3zewIq8bf9o9sQlxxBt2l-ruldLs0RnROznv-jtZ9mrSnDrPPqB"
+                clientId: credentials.clientId
             }}
         />
     )
